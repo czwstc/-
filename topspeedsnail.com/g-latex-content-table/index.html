@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/g-latex-content-table/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:31 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>LaTeX简要教程7:生成目录</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="LaTeX提供了自动生成目录的命令，非常简单直接。
+
+" />
+    <meta property="og:description" content="LaTeX提供了自动生成目录的命令，非常简单直接。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="LaTeX简要教程7:生成目录" />
+    <meta property="twitter:title" content="LaTeX简要教程7:生成目录" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>LaTeX简要教程7:生成目录</h1>
+
+  <div class="entry">
+    <p>LaTeX提供了自动生成目录的命令，非常简单直接。</p>
+
+<p>LaTeX使用section、subsection等命令创建标题/段落，目录根据这些标题生成。</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-30%20at%2010.04.08.png" alt="Latex" /></p>
+
+<p>简单例子：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+
+<span class="k">\tableofcontents</span>
+<span class="k">\newpage</span>
+
+<span class="k">\section</span><span class="p">{</span>First Section<span class="p">}</span>
+
+some text
+
+<span class="k">\subsection</span><span class="p">{</span>First Sub Section<span class="p">}</span>
+
+some text
+
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>编译.tex文件两次，你会得到如下目录：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-30%20at%2010.22.44.png" alt="Latex" /></p>
+
+<p>同样可以为表格和图像生成目录列表；使用\listoffigures和\listoftables命令：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="nt">\begin{figure}</span>
+  <span class="c">%...</span>
+  <span class="k">\caption</span><span class="p">{</span>picture<span class="p">}</span>
+  <span class="c">%...</span>
+<span class="nt">\end{figure}</span>
+
+<span class="nt">\begin{table}</span>
+  <span class="c">%...</span>
+  <span class="k">\caption</span><span class="p">{</span>table<span class="p">}</span>
+  <span class="c">%...</span>
+<span class="nt">\end{table}</span>
+...
+<span class="nt">\begin{appendix}</span>
+  <span class="c">%...</span>
+  <span class="k">\listoffigures</span>
+  <span class="k">\listoftables</span>
+  <span class="c">%...</span>
+<span class="nt">\end{appendix}</span></code></pre></figure>
+
+<p>总结：</p>
+
+<ul>
+  <li>使用\tableofcontents命令生成目录</li>
+  <li>需要编译.tex文件两次</li>
+  <li>使用\listoffigures和\listoftables命令为表格和图像生成目录</li>
+</ul>
+
+  </div>
+
+  <div class="date">
+    Written on March 30, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/g-latex-content-table/',
+		  'title': 'LaTeX简要教程7:生成目录'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/g-latex-content-table/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:33 GMT -->
+</html>

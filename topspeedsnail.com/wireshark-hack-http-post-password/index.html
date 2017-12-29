@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/wireshark-hack-http-post-password/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:16:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>在Wifi网络中嗅探明文密码(HTTP POST请求、POP等)</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="全世界，现在大约50%的网站没有使用SSL加密，天朝尤其多。
+
+" />
+    <meta property="og:description" content="全世界，现在大约50%的网站没有使用SSL加密，天朝尤其多。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="在Wifi网络中嗅探明文密码(HTTP POST请求、POP等)" />
+    <meta property="twitter:title" content="在Wifi网络中嗅探明文密码(HTTP POST请求、POP等)" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>在Wifi网络中嗅探明文密码(HTTP POST请求、POP等)</h1>
+
+  <div class="entry">
+    <p>全世界，现在大约50%的网站没有使用SSL加密，天朝尤其多。</p>
+
+<p>我们都知道通过HTTP发送的数据都是明文，没有使用任何加密，即使是在数据敏感的登录页面。</p>
+
+<p>本文的目的是：如果你在不熟悉的网络环境中，要注意提高警惕。</p>
+
+<p>没有人希望自己的密码暴露给他人，so，不要嗅探（狗）他人的密码。</p>
+
+<blockquote>
+  <p>想象有一个攻击者坐在某个咖啡馆里，桌子上放着他的笔记本电脑并连着咖啡馆的免费wifi。这个家伙就可以非常容易的获得网络里通信信息。如果密码是明文，连破解都省了。</p>
+</blockquote>
+
+<p>系统要求：</p>
+
+<ul>
+  <li>Wireshark</li>
+  <li>ARP欺骗攻击(ARP spoof attack)</li>
+  <li>无线网卡</li>
+</ul>
+
+<hr />
+
+<p>无线网卡监听模式和混杂模式有什么不同：</p>
+
+<ul>
+  <li>监听模式允许网卡不用连接wifi就可以抓取特性频道的数据，就是在空气中抓取某个波段的数据。可以用在<a href="../macbook-crack-wifi-with-wpa-wpa2/index.html">破解wifi密码</a>上</li>
+  <li>混杂模式（连接wifi）就是接收所有经过网卡的数据包，包括不是发给本机的包，即不验证MAC地址</li>
+  <li>普通模式下网卡只接收发给本机的包</li>
+</ul>
+
+<p>现在的无线路由器都是和主机直接通信，如果你直接使用嗅探工具，只会得到广播信息和自己的连接信息。为了得到网络中所有设备发送的的数据，攻击者必须想办法充当网关的角色，ARP欺骗攻击就干了这样一件事。如果有路由器控制权的话就省事了。</p>
+
+<p>集线器可以直接嗅探，因为所有数据的发送形式是广播。看看这：<a href="http://blog.topspeedsnail.com/archives/4391">集线器、交换机和路由器有什么不同</a>。</p>
+
+<p>ARP欺骗攻击(ARP spoof attack)：</p>
+
+<ul>
+  <li><a href="../kali-linux-preform-man-in-middle-attack/index.html">使用Kali Linux执行中间人攻击</a></li>
+  <li><a href="../kali-linux-ettercap-arp-spoof-attack/index.html">Kali Linux ettercap的使用</a></li>
+</ul>
+
+<hr />
+
+<h2 id="下载安装wireshark">下载安装Wireshark</h2>
+
+<p>它也支持Windows、Mac OSX；下载地址：<a href="https://www.wireshark.org/download.html">https://www.wireshark.org/download.html</a></p>
+
+<p>Kali Linux自带了这个工具。</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-18%20at%2018.25.28.png" alt="Wireshark" /></p>
+
+<h2 id="arp欺骗攻击">ARP欺骗攻击</h2>
+
+<p>我选择使用ettercap，如果你不知道怎么使用，看，<a href="../kali-linux-ettercap-arp-spoof-attack/index.html">Kali Linux ettercap的使用</a>。</p>
+
+<p>攻击同一wifi网络中的其他主机：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-19%2009-00-57.png" alt="ettercap" /></p>
+
+<h2 id="使用wireshark抓包">使用Wireshark抓包</h2>
+
+<p>现在wifi网络中所有计算机发送的数据包都经过攻击者计算机，攻击者需要抓取这些数据包。</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-19%2009-06-38.png" alt="Wireshark" /></p>
+
+<p>等待其他人使用明文密码。</p>
+
+<p>例如，要找HTTP POST请求，过滤：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http.request.method == "POST"
+</code></pre>
+</div>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-19%2009-16-16.png" alt="Wireshark" /></p>
+
+<p>查看明文密码：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-19%2009-21-05.png" alt="Wireshark" /></p>
+
+<p>ettercap也可以抓包，它直接提取了明文密码：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-19%2009-27-22.png" alt="ettercap" /></p>
+
+<p>POP抓取的是我163的邮箱账户。我手机安装了邮件客户端，如果连接网络它会定时收取邮件，在认证的过程中就把密码暴露了。</p>
+
+<p>常用的其他未加密服务：FTP、Telnet等</p>
+
+<hr />
+
+<p>总结：</p>
+
+<ul>
+  <li>不要使用公共网络访问HTTP、POP等不安全服务，尽量使用HTTPS类型的网站。</li>
+  <li>使用VPN加密连接；顺带还能翻墙。实际上也不是100%可靠，SSH服务器和目标之间还可以做手脚。</li>
+  <li>密码要勤换，千万不要万年不变。</li>
+  <li>感觉网络无安全，既要防黑、还要防朝廷。</li>
+</ul>
+
+  </div>
+
+  <div class="date">
+    Written on April 18, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/wireshark-hack-http-post-password/',
+		  'title': '在Wifi网络中嗅探明文密码(HTTP POST请求、POP等)'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/wireshark-hack-http-post-password/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:17:38 GMT -->
+</html>

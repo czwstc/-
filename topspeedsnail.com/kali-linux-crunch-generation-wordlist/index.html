@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-crunch-generation-wordlist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:54:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Kali Linux使用crunch生成密码字典</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="crunch是生成密码字典的工具，通常用在暴力破解中。
+
+" />
+    <meta property="og:description" content="crunch是生成密码字典的工具，通常用在暴力破解中。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Kali Linux使用crunch生成密码字典" />
+    <meta property="twitter:title" content="Kali Linux使用crunch生成密码字典" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Kali Linux使用crunch生成密码字典</h1>
+
+  <div class="entry">
+    <p>crunch是生成密码字典的工具，通常用在暴力破解中。</p>
+
+<blockquote>
+  <p>Crunch can create a wordlist based on criteria you specify.  The output from crunch can be sent to the screen, file, or to another program.</p>
+</blockquote>
+
+<h1 id="几个例子">几个例子</h1>
+
+<h3 id="生成4个数字组合的密码字典">生成4个数字组合的密码字典：</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># crunch 4 4 0123456789 -o ~/wordlist.txt</span></code></pre></figure>
+
+<p>第一个4代表生成的字符串最短几个字符，第二个4代表生成的字符串最长几个字符。</p>
+
+<h3 id="生成4个字母和1980组合的密码字典">生成4个字母和1980组合的密码字典：</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># crunch 8 8 abcdefghiABCDE -t @@@@1980 -o ~/wordlist.txt</span></code></pre></figure>
+
+<p>字符集必须按小写，大写，数字，符号的顺序，使用\做为转译字符。</p>
+
+<h3 id="生成4个小写字母4个数字组合的密码字典">生成4个小写字母4个数字组合的密码字典：</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># crunch 8 8 -t @@@@%%%% -o ~/wordlist.txt</span></code></pre></figure>
+
+<p>更多信息，查看crunch的man手册，写的非常详细：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># man crunch</span></code></pre></figure>
+
+  </div>
+
+  <div class="date">
+    Written on April 23, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-crunch-generation-wordlist/',
+		  'title': 'Kali Linux使用crunch生成密码字典'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-crunch-generation-wordlist/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:54:26 GMT -->
+</html>

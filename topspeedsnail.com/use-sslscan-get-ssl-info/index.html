@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/use-sslscan-get-ssl-info/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:48:29 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用sslscan获得SSL/TLS信息</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="SSLscan主要探测基于ssl的服务，如https。SSLscan是一款探测目标服务器所支持的SSL加密算法工具。
+
+" />
+    <meta property="og:description" content="SSLscan主要探测基于ssl的服务，如https。SSLscan是一款探测目标服务器所支持的SSL加密算法工具。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用sslscan获得SSL/TLS信息" />
+    <meta property="twitter:title" content="使用sslscan获得SSL/TLS信息" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用sslscan获得SSL/TLS信息</h1>
+
+  <div class="entry">
+    <p>SSLscan主要探测基于ssl的服务，如https。SSLscan是一款探测目标服务器所支持的SSL加密算法工具。</p>
+
+<p>SSlscan的代码托管在<a href="https://github.com/DinoTools/sslscan">Github</a></p>
+
+<blockquote>
+  <p>SSLScan queries SSL services, such as HTTPS, in order to determine the ciphers that are supported. SSLScan is designed to be easy, lean and fast. The output includes preferred ciphers of the SSL service, the certificate and is in Text and XML formats.</p>
+</blockquote>
+
+<p>使用HTTPS可以防止中间人攻击，但是只有当配置正确并使用强加密才行。</p>
+
+<p>关于SSL协议的漏洞也爆出了不少。</p>
+
+<p><strong>使用示例：</strong></p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># sslscan your_target</span></code></pre></figure>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-18%20at%2009.25.10.png" alt="使用sslscan获得SSL/TLS信息" /></p>
+
+<p>Heartbleed是TLS实现上的一个漏洞，2014年4月爆出。更多信息：<a href="https://en.wikipedia.org/wiki/Heartbleed">https://en.wikipedia.org/wiki/Heartbleed</a></p>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-18%20at%2009.28.41.png" alt="使用sslscan获得SSL/TLS信息" /></p>
+
+<p>上图显示服务器支持的加密算法，红字认为是不那么安全的加密算法，黄字中等安全。</p>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-18%20at%2009.32.57.png" alt="使用sslscan获得SSL/TLS信息" /></p>
+
+<p>SSL证书信息，RSA key的长度建议是2048 bit。</p>
+
+<hr />
+
+<p>Kali Linux中还有一个叫SSLyze的工具，配合sslscan获得更多信息：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># sslyze --regular your_target</span></code></pre></figure>
+
+<p>SSL/TLS信息也可以用OpenSSL命令获得：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># openssl s_client -connect your_target:443</span></code></pre></figure>
+
+<hr />
+
+<p>基于sslscan的工具：TLSSLed</p>
+
+<p>它是一个Linux shell脚本,它的功能是测试目标SSL/TLS(HTTPS)WEB 服务器的安全性。</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># tlssled your_target 443</span></code></pre></figure>
+
+  </div>
+
+  <div class="date">
+    Written on May 17, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/use-sslscan-get-ssl-info/',
+		  'title': '使用sslscan获得SSL/TLS信息'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/use-sslscan-get-ssl-info/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:49:14 GMT -->
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/nodejs-intro-newbe/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:32:52 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Linux：源码安装nodejs</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Node.js是服务端的JavaScript。这个东西最近很流行。如果你有JavaScript语言基础，并且厌倦了前端开发，你可以学习使用Nodejs开发服务器后端程序。假设你有JavaScript编程基础。
+
+" />
+    <meta property="og:description" content="Node.js是服务端的JavaScript。这个东西最近很流行。如果你有JavaScript语言基础，并且厌倦了前端开发，你可以学习使用Nodejs开发服务器后端程序。假设你有JavaScript编程基础。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Linux：源码安装nodejs" />
+    <meta property="twitter:title" content="Linux：源码安装nodejs" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Linux：源码安装nodejs</h1>
+
+  <div class="entry">
+    <p><a href="http://en.wikipedia.org/wiki/Nodejs">Node.js</a>是服务端的JavaScript。这个东西最近很流行。如果你有JavaScript语言基础，并且厌倦了前端开发，你可以学习使用Nodejs开发服务器后端程序。假设你有JavaScript编程基础。</p>
+
+<p><img src="../images/2016/3/node-js.jpg" alt="jpeg pic" /></p>
+
+<p><strong>JavaScript是怎么在服务端运行的呢？</strong></p>
+
+<p>Node.js运行在Chrome v8环境上，v8是JavaScript引擎，可以运行JavaScript代码。</p>
+
+<p><strong>安装Node.js</strong></p>
+
+<p>Node的开发环境：建议使用Linux。我使用的系统为Ubuntu，下面我从源码安装Node。</p>
+
+<p>安装基本开发环境：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo apt-get install build-essential</code></pre></figure>
+
+<p>使用git clone nodejs源码：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span><span class="nb">cd</span>
+<span class="gp">$ </span>git clone https://github.com/nodejs/node</code></pre></figure>
+
+<p>checkout最新分支，我安装时，最新版本是v4.4.1：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span><span class="nb">cd </span>node
+<span class="gp">$ </span>git checkout v4.4.1</code></pre></figure>
+
+<p>创建一个nodejs安装目录：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>mkdir ~/my_local</code></pre></figure>
+
+<p>编译配置nodejs：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>./configure --prefix<span class="o">=</span><span class="nv">$HOME</span>/my_local/node</code></pre></figure>
+
+<p>编译nodejs：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>make</code></pre></figure>
+
+<p>安装nodejs：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>make install</code></pre></figure>
+
+<p>配置环境变量：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="nb">echo</span> <span class="s1">'export PATH=$HOME/my_local/node/bin:$PATH'</span> &gt;&gt; ~/.profile
+<span class="nb">echo</span> <span class="s1">'export NODE_PATH=$HOME/my_local/node:$HOME/my_local/node/lib/node_modules'</span> &gt;&gt; ~/.profile
+<span class="nb">source</span> ~/.profile</code></pre></figure>
+
+<p><strong>测试nodejs</strong></p>
+
+<p>使用经典的 <strong>Hello World</strong> 检测Nodejs是否成功安装。创建一个文件 <em>hello.js</em>，内容如下：</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Hello World!"</span><span class="p">)</span></code></pre></figure>
+
+<p><code class="highlighter-rouge">console.log</code> 语句相当于python中的print。执行结果：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-23%20at%2019.30.18.png" alt="nodejs" /></p>
+
+  </div>
+
+  <div class="date">
+    Written on March 23, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/nodejs-intro-newbe/',
+		  'title': 'Linux：源码安装nodejs'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/nodejs-intro-newbe/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:32:56 GMT -->
+</html>

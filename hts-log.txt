@@ -1,0 +1,16 @@
+HTTrack3.49-2 launched on Thu, 30 Nov 2017 11:46:43 at http://topspeedsnail.com
+(httrack http://topspeedsnail.com -O /Users/czwstc/Downloads/topspeedsnail.com )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+12:33:26	Warning: 	Retry after error -4 (Incorrect length (220372 Bytes, 442992 expected)) at link topspeedsnail.com/images/2016/4/Screenshot from 2016-04-21 20-06-53.png (from topspeedsnail.com/kali-linux-crack-wifi-wpa/)
+12:33:28	Warning: 	Retry after error -4 (Incorrect length (154868 Bytes, 318825 expected)) at link topspeedsnail.com/images/2016/4/Screen Shot 2016-04-21 at 12.41.28.png (from topspeedsnail.com/kali-linux-findmyhash/)
+12:33:28	Warning: 	Retry after error -4 (No data (connection closed)) at link topspeedsnail.com/images/2016/4/Screenshot from 2016-04-21 09-13-40.png (from topspeedsnail.com/kali-linux-findmyhash/)
+12:33:48	Warning: 	Retry after error -4 (Incorrect length (292996 Bytes, 484964 expected)) at link topspeedsnail.com/images/2016/4/Screenshot from 2016-04-20 18-34-08.png (from topspeedsnail.com/kali-linux-acccheck-crack-windows-passwd-smb/)
+12:33:58	Error: 	"Not Found" (404) at link topspeedsnail.com/hack-blind-sql-injection-attack/sqlmap.org (from topspeedsnail.com/hack-blind-sql-injection-attack/)
+
+HTTrack Website Copier/3.49-2 mirror complete in 47 minutes 47 seconds : 319 links scanned, 313 files written (34438043 bytes overall) [34081845 bytes received at 11887 bytes/sec], 780367 bytes transferred using HTTP compression in 89 files, ratio 38%
+(1 errors, 4 warnings, 0 messages)

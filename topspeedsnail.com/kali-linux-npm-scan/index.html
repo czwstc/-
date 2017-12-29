@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-npm-scan/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:27:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Kali Linux：使用nmap扫描主机</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="nmap－Network Mapper，是著名的网络扫描和嗅探工具包。他同样支持Windows和OS X。
+
+" />
+    <meta property="og:description" content="nmap－Network Mapper，是著名的网络扫描和嗅探工具包。他同样支持Windows和OS X。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Kali Linux：使用nmap扫描主机" />
+    <meta property="twitter:title" content="Kali Linux：使用nmap扫描主机" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Kali Linux：使用nmap扫描主机</h1>
+
+  <div class="entry">
+    <p>nmap－Network Mapper，是著名的网络扫描和嗅探工具包。他同样支持Windows和OS X。</p>
+
+<h2 id="扫描开放端口和判断操作系统类型">扫描开放端口和判断操作系统类型</h2>
+
+<p>先让我们ping一段地址范围，找到启动的主机：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># nmap -sP 159.203.205.0-100</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-05%2022-24-44.png" alt="kail linux nmap" /></p>
+
+<p>使用SYN扫描探测操作系统类型：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># nmap -sS 159.203.205.61 -O</span></code></pre></figure>
+
+<p>扫描开放端口：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># nmap -sV 159.203.205.61 -A</span></code></pre></figure>
+
+<h2 id="扫描web服务器的网站目录">扫描web服务器的网站目录</h2>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># nmap –script http-enum.nse blog.topspeedsnail.com</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-05%2022-41-03.png" alt="kail linux nmap" /></p>
+
+<p>上面使用了脚本，存放路径：(/usr/share/nmap/scripts)。目录里有各种各样的脚本。</p>
+
+<h2 id="扫描主机ssl-heartbleed-漏洞2012">扫描主机SSL Heartbleed 漏洞（2012）</h2>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># nmap -d –script ssl-heartbleed –script-args vulns.showall -sV 192.168.0.106</span></code></pre></figure>
+
+  </div>
+
+  <div class="date">
+    Written on April  6, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-npm-scan/',
+		  'title': 'Kali Linux：使用nmap扫描主机'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-npm-scan/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:27:28 GMT -->
+</html>

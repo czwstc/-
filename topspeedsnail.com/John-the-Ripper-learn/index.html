@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/John-the-Ripper-learn/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:28:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Kali Linux：使用John the Ripper破解密码</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="
+  John the Ripper免费的开源软件，是一个快速的密码破解工具，用于在已知密文的情况下尝试破解出明文的破解密码软件，支持目前大多数的加密算法，如DES、MD4、MD5等。它支持多种不同类型的系统架构，包括Unix、Linux、Windows、DOS模式、BeOS和OpenVMS，主要目的是破解不够牢固的Unix/Linux系统密码。
+
+
+" />
+    <meta property="og:description" content="
+  John the Ripper免费的开源软件，是一个快速的密码破解工具，用于在已知密文的情况下尝试破解出明文的破解密码软件，支持目前大多数的加密算法，如DES、MD4、MD5等。它支持多种不同类型的系统架构，包括Unix、Linux、Windows、DOS模式、BeOS和OpenVMS，主要目的是破解不够牢固的Unix/Linux系统密码。
+
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Kali Linux：使用John the Ripper破解密码" />
+    <meta property="twitter:title" content="Kali Linux：使用John the Ripper破解密码" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Kali Linux：使用John the Ripper破解密码</h1>
+
+  <div class="entry">
+    <blockquote>
+  <p>John the Ripper免费的开源软件，是一个快速的密码破解工具，用于在已知密文的情况下尝试破解出明文的破解密码软件，支持目前大多数的加密算法，如DES、MD4、MD5等。它支持多种不同类型的系统架构，包括Unix、Linux、Windows、DOS模式、BeOS和OpenVMS，主要目的是破解不够牢固的Unix/Linux系统密码。</p>
+</blockquote>
+
+<p>John the Ripper支持字典破解方式和暴力破解方式。</p>
+
+<p>下面，我以破解Linux用户密码为例进行简单说明。</p>
+
+<p>破解Linux用户密码需要使用到两个文件（包含用户的信息和密码hash值）：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/etc/passwd
+/etc/shadow
+</code></pre>
+</div>
+
+<h2 id="创建一个测试用户-我们就来破解这个用户密码">创建一个测试用户-我们就来破解这个用户密码</h2>
+
+<p>添加一个用户test，并把密码设置为password。</p>
+
+<p>创建新用户test：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># useradd -m test -G sudo -s /bin/bash</span></code></pre></figure>
+
+<p>设置test的密码：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># passwd test</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-04%20at%2015.46.23.png" alt="Kali Linux" /></p>
+
+<h2 id="使用unshadow命令组合etcpasswd和etcshadow">使用unshadow命令组合/etc/passwd和/etc/shadow</h2>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># cd </span>
+<span class="c"># unshadow /etc/passwd /etc/shadow &gt; test_passwd</span></code></pre></figure>
+
+<p>你可以对比一下test_passwd和/etc/passwd、/etc/shadow文件，其实就是一种简单的组合。</p>
+
+<h2 id="使用john-the-ripper破解linux用户密码">使用John the Ripper破解Linux用户密码</h2>
+
+<p>我们还需要一个字典，John带了一个小小的字典，位于/usr/share/john/password.lst。当然，你可以使用自己的字典，或上网下载TB级的字典文件。</p>
+
+<p>我使用自带的字典为例，破解命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># john --wordlist=/usr/share/john/password.lst test_passwd</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-04%20at%2016.04.19.png" alt="Kali Linux" /></p>
+
+<p>从上图可以看到，john破解了test用户的密码。其实test_passwd文件中还有一个root用户，因为密码不在字典中，所以没有被破解。</p>
+
+<p>查看破解信息：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">john --show test_passwd</code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-04%20at%2016.09.35.png" alt="Kali Linux" /></p>
+
+<hr />
+
+<p>上面是关于John the Ripper最简单的使用。更多高级用法，像暴力破解，增量模式等等，请看文档：</p>
+
+<blockquote>
+  <p><a href="http://www.openwall.com/john/doc/MODES.shtml">http://www.openwall.com/john/doc/MODES.shtml</a></p>
+</blockquote>
+
+  </div>
+
+  <div class="date">
+    Written on April  4, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/John-the-Ripper-learn/',
+		  'title': 'Kali Linux：使用John the Ripper破解密码'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/John-the-Ripper-learn/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:28:55 GMT -->
+</html>

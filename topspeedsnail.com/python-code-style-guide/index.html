@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/python-code-style-guide/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:33:00 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>pep8：Python代码风格检查工具</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Python官网定义的代码风格 PEP 0008 – Style Guide for Python Code。
+
+" />
+    <meta property="og:description" content="Python官网定义的代码风格 PEP 0008 – Style Guide for Python Code。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="pep8：Python代码风格检查工具" />
+    <meta property="twitter:title" content="pep8：Python代码风格检查工具" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>pep8：Python代码风格检查工具</h1>
+
+  <div class="entry">
+    <p>Python官网定义的代码风格 <a href="https://www.python.org/dev/peps/pep-0008/">PEP 0008 – Style Guide for Python Code</a>。</p>
+
+<p>pep8是检测编码风格是否符合 <strong><em>PEP 0008</em></strong> 的工具。</p>
+
+<p><strong>安装pep8：</strong></p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">pip install pep8</code></pre></figure>
+
+<p><strong>升级pep8：</strong></p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">pip install --upgrade pep8</code></pre></figure>
+
+<p><strong>卸载pep8：</strong></p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">pip uninstall pep8</code></pre></figure>
+
+<hr />
+
+<p>如果使用的是Ubuntu，还可以使用从apt仓库中安装：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo apt-get install pep8</code></pre></figure>
+
+<p>###使用示例</p>
+
+<p>故意写几行不符合Python编码风格的代码（test.py）：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span>
+
+<span class="k">def</span> <span class="nf">long_function_name</span><span class="p">(</span>
+    <span class="n">var_one</span><span class="p">,</span> <span class="n">var_two</span><span class="p">,</span> <span class="n">var_three</span><span class="p">,</span>
+    <span class="n">var_four</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">var_one</span><span class="p">)</span></code></pre></figure>
+
+<p>检查是否符合编码规范：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>pep8 --first test.py
+test.py:1:11: E401 multiple imports on one line
+test.py:4:1: E302 expected 2 blank lines, found 1
+test.py:6:5: E125 continuation line with same indent as next logical line</code></pre></figure>
+
+<p>1、4、6行代码不符合规范</p>
+
+<p>你还可以输出不符合规范的代码和原因：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>pep8 --show-source --show-pep8 test.py</code></pre></figure>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-22%20at%2018.41.49.png" alt="pep8" /></p>
+
+<p>更多选项，查看帮助信息：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>pep8 -h</code></pre></figure>
+
+<hr />
+
+<p>使用代码测试(CodeStyle.py)：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pep8</span>
+
+<span class="n">python_code_style_checker</span> <span class="o">=</span> <span class="n">pep8</span><span class="o">.</span><span class="n">Checker</span><span class="p">(</span><span class="s">'test.py'</span><span class="p">,</span> <span class="n">show_source</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">file_errors</span> <span class="o">=</span> <span class="n">python_code_style_checker</span><span class="o">.</span><span class="n">check_all</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Found </span><span class="si">%</span><span class="s">s errors (and warnings)"</span> <span class="o">%</span> <span class="n">file_errors</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-22%20at%2018.49.03.png" alt="pep8 code style" /></p>
+
+  </div>
+
+  <div class="date">
+    Written on March 22, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/python-code-style-guide/',
+		  'title': 'pep8：Python代码风格检查工具'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/python-code-style-guide/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:33:13 GMT -->
+</html>

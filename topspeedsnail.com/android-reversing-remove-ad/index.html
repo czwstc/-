@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/android-reversing-remove-ad/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:25:58 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>移除Android应用广告－Android逆向工程</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="我用以前做过的一个小游戏为例，源代码地址：http://git.oschina.net/androidsourcecode/parity，如果不想自己编译，其中已有编译好的APK包（Parity-release-signed.apk）。这个游戏内使用了google的插页广告。我的目的是逆向破解这个apk，去掉其中的广告。
+
+" />
+    <meta property="og:description" content="我用以前做过的一个小游戏为例，源代码地址：http://git.oschina.net/androidsourcecode/parity，如果不想自己编译，其中已有编译好的APK包（Parity-release-signed.apk）。这个游戏内使用了google的插页广告。我的目的是逆向破解这个apk，去掉其中的广告。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="移除Android应用广告－Android逆向工程" />
+    <meta property="twitter:title" content="移除Android应用广告－Android逆向工程" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>移除Android应用广告－Android逆向工程</h1>
+
+  <div class="entry">
+    <p>我用以前做过的一个小游戏为例，源代码地址：<a href="http://git.oschina.net/androidsourcecode/parity">http://git.oschina.net/androidsourcecode/parity</a>，如果不想自己编译，其中已有编译好的APK包（Parity-release-signed.apk）。这个游戏内使用了google的插页广告。我的目的是逆向破解这个apk，去掉其中的广告。</p>
+
+<p><a href="../android-reversing-env-setup/index.html">Android逆向工程基本环境设置</a></p>
+
+<hr />
+
+<p>如果要破解的应用已经安装到了手机里，我们需要使用adb pull从手机里下载这个app。</p>
+
+<p>确保手机已打开usb调试，连接到电脑，执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># adb shell 'pm list packages -f'</span></code></pre></figure>
+
+<p>上面命令列出了android手机中已安装的app，找到要破解的app：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-12%2011-48-46.png" alt="adb shell list app" /></p>
+
+<p>下载app：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># adb pull /data/app/com.topspeedsnail.parity-1/base.apk</span></code></pre></figure>
+
+<hr />
+
+<p>使用apktool解压、反汇编要破解的apk：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># apktool d base.apk</span></code></pre></figure>
+
+<p>d选项是decode的意思。</p>
+
+<p>如果出现如下错误，说明你的apktool工具没有安装正确的framework。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>I: Decoding AndroidManifest.xml with resources...
+I: Loading resource table from file: /root/apktool/framework/1.apk
+W: Could not decode attr value, using undecoded value instead: ns=android, name=versionCode, value=0x00000001
+I: Loading resource table from file: /root/apktool/framework/1.apk
+W: Could not decode attr value, using undecoded value instead: ns=android, name=versionName, value=0x00000019
+I: Loading resource table from file: /root/apktool/framework/1.apk
+W: Could not decode attr value, using undecoded value instead: ns=android, name=versionCode, value=0x00000001
+I: Loading resource table from file: /root/apktool/framework/1.apk
+W: Could not decode attr value, using undecoded value instead: ns=android, name=versionName, value=0x00000019
+Exception in thread "main" java.lang.NullPointerException
+	at java.io.Writer.write(Writer.java:157)
+	at brut.androlib.res.util.ExtMXSerializer.writeAttributeValue(ExtMXSerializer.java:38)
+</code></pre>
+</div>
+
+<p>关于apktool framework的解释：</p>
+
+<blockquote>
+  <p>As you probably know, Android apps utilize code and resources that are found on the Android OS itself. These are known as framework resources and Apktool relies on these to properly decode and build apks.</p>
+
+  <p>Every Apktool release contains internally the most up to date AOSP framework at the time of the release. This allows you to decode and build most apks without a problem. However, manufacturers add their own framework files in addition to the regular AOSP ones. To use apktool against these manufacturer apks you must first install the manufacturer framework files.</p>
+</blockquote>
+
+<p>解决方法，下载android手机里的framework-res.apk。我使用的系统是android 5.1。</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-12%2012-15-25.png" alt="adb shell" /></p>
+
+<p>把下载的文件移动到apktool的framework目录：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># mv framework-res.apk /root/apktool/framework/1.apk</span></code></pre></figure>
+
+<p>再次反编译；反汇编之后的目录：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-12%2012-45-42.png" alt="apktool" /></p>
+
+<p>你应该对比源代码好好的研究一下这个目录。</p>
+
+<hr />
+
+<p>从AndroidManifest.xml文件和smali/com/google/ads目录可以看出，这个游戏使用了google广告。</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-12%2012-52-50.png" alt="android" /></p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-12%2012-54-48.png" alt="android" /></p>
+
+<h3 id="移除广告最简单的方法">移除广告最简单的方法</h3>
+
+<p>找到google投放代码的ID（AdmodPlugin.smali）：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-12%2013-07-43.png" alt="android" /></p>
+
+<p>对应的源代码：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AdmobPlugin</span> <span class="o">{</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="n">Cocos2dxActivity</span> <span class="n">activity</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">TAG</span> <span class="o">=</span> <span class="s">"cocos2d"</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="n">InterstitialAd</span> <span class="n">interstitial</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="n">AdView</span> <span class="n">adView</span><span class="o">;</span>
+	
+	<span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">MY_INTERSTITIAL_ID</span> <span class="o">=</span> <span class="s">"ca-app-pub-28..."</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">MY_BANNER_ID</span> <span class="o">=</span> <span class="s">"ca-app-pub-286..."</span><span class="o">;</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setActivity</span><span class="o">(</span><span class="n">Cocos2dxActivity</span> <span class="n">act</span><span class="o">){</span>
+		<span class="n">activity</span> <span class="o">=</span> <span class="n">act</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="o">...</span></code></pre></figure>
+
+<p>把AdmodPlugin.smali中的广告ID更改为无效ID；</p>
+
+<p>有些人会替换为自己的ID然后再打包发布－咒生孩子没屁眼!!!咒</p>
+
+<p>打包为apk文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># apktool b base -o base_no_ads.apk</span></code></pre></figure>
+
+<p>如果有如下错误：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>I: Building resources...
+W: aapt location could not be found. Defaulting back to default
+Exception in thread "main" brut.androlib.AndrolibException: brut.androlib.AndrolibException: brut.common.BrutException: could not exec command: [aapt, p, --forced-package-id, 127, --min-sdk-version, 9, --version-code, 1, --version-name, 1.0, -F, /tmp/APKTOOL3434486203532207501.tmp, -0, resources.arsc, -0, assets/level/easy/10, -0, assets/level/easy/12, -0, assets/level/easy/14, -0, assets/level/easy/23, -0, assets/level/easy/28, -0, assets/level/easy/4, -0, assets/level/medium/11, -0, assets/level/medium/20, -0, assets/level/medium/4, -0, assets/level/medium/5, -0, assets/level/medium/7, -0, arsc, -I, /root/apktool/framework/1.apk, -S, /root/Hacking/base/res, -M, /root/Hacking/base/AndroidManifest.xml]
+	at brut.androlib.Androlib.buildResourcesFull(Androlib.java:465)
+	at brut.androlib.Androlib.buildResources(Androlib.java:403)
+	at brut.androlib.Androlib.build(Androlib.java:291)
+	at brut.androlib.Androlib.build(Androlib.java:261)
+	at brut.apktool.Main.cmdBuild(Main.java:225)
+	at brut.apktool.Main.main(Main.java:84)
+Caused by: brut.androlib.AndrolibException: brut.common.BrutException: could not exec command: [aapt, p, --forced-package-id, 127, --min-sdk-version, 9, --version-code, 1, --version-name, 1.0, -F, /tmp/APKTOOL3434486203532207501.tmp, -0, resources.arsc, -0, assets/level/easy/10, -0, assets/level/easy/12, -0, assets/level/easy/14, -0, assets/level/easy/23, -0, assets/level/easy/28, -0, assets/level/easy/4, -0, assets/level/medium/11, -0, assets/level/medium/20, -0, assets/level/medium/4, -0, assets/level/medium/5, -0, assets/level/medium/7, -0, arsc, -I, /root/apktool/framework/1.apk, -S, /root/Hacking/base/res, -M, /root/Hacking/base/AndroidManifest.xml]
+	at brut.androlib.res.AndrolibResources.aaptPackage(AndrolibResources.java:425)
+	at brut.androlib.Androlib.buildResourcesFull(Androlib.java:451)
+	... 5 more
+Caused by: brut.common.BrutException: could not exec command: [aapt, p, --forced-package-id, 127, --min-sdk-version, 9, --version-code, 1, --version-name, 1.0, -F, /tmp/APKTOOL3434486203532207501.tmp, -0, resources.arsc, -0, assets/level/easy/10, -0, assets/level/easy/12, -0, assets/level/easy/14, -0, assets/level/easy/23, -0, assets/level/easy/28, -0, assets/level/easy/4, -0, assets/level/medium/11, -0, assets/level/medium/20, -0, assets/level/medium/4, -0, assets/level/medium/5, -0, assets/level/medium/7, -0, arsc, -I, /root/apktool/framework/1.apk, -S, /root/Hacking/base/res, -M, /root/Hacking/base/AndroidManifest.xml]
+	at brut.util.OS.exec(OS.java:94)
+	at brut.androlib.res.AndrolibResources.aaptPackage(AndrolibResources.java:419)
+	... 6 more
+Caused by: java.io.IOException: Cannot run program "aapt": error=2, No such file or directory
+	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1048)
+	at java.lang.Runtime.exec(Runtime.java:620)
+	at java.lang.Runtime.exec(Runtime.java:485)
+	at brut.util.OS.exec(OS.java:84)
+	... 7 more
+Caused by: java.io.IOException: error=2, No such file or directory
+	at java.lang.UNIXProcess.forkAndExec(Native Method)
+	at java.lang.UNIXProcess.&lt;init&gt;(UNIXProcess.java:248)
+	at java.lang.ProcessImpl.start(ProcessImpl.java:134)
+	at java.lang.ProcessBuilder.start(ProcessBuilder.java:1029)
+	... 10 more
+</code></pre>
+</div>
+
+<p>指定aapt所在目录：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># apktool b --aapt /opt/android-sdk/build-tools/23.0.3/aapt base -o base_no_ads.apk</span></code></pre></figure>
+
+<p>签名：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># keytool -genkey -alias mykey -keyalg RSA -validity 40000 -keystore your.keystore</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># jarsigner -keystore your_keystore base_no_ads.apk your_key_name</span></code></pre></figure>
+
+<p>安装到手机：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># adb install base_no_ads.apk </span></code></pre></figure>
+
+<hr />
+
+<p>其他移除广告的方法：</p>
+
+<ul>
+  <li>修改com.google.ads代码，隐藏广告</li>
+  <li>删除调用广告的代码</li>
+  <li>修改资源文件，把android:layout_width 和 android:layout_height改为0px，实现隐藏广告。</li>
+</ul>
+
+<p>对破解最有用的Dalvik汇编指令：if-xxx：条件判断。例如：if-eqz v0, :cond_0，如果v0 == 0，跳转到:cond_0。</p>
+
+<hr />
+
+<p><a href="../start-learn-android-reversing/index.html">学习Android逆向工程</a></p>
+
+<p><a href="../reversing-engineering-android-androguard/index.html">Android逆向工具：Androguard（一）</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 12, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/android-reversing-remove-ad/',
+		  'title': '移除Android应用广告－Android逆向工程'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/android-reversing-remove-ad/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:26:54 GMT -->
+</html>

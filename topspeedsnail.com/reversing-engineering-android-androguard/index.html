@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/reversing-engineering-android-androguard/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:21:35 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Android逆向工具：Androguard（一）</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="本文介绍一下Androguard的安装和使用。
+
+" />
+    <meta property="og:description" content="本文介绍一下Androguard的安装和使用。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Android逆向工具：Androguard（一）" />
+    <meta property="twitter:title" content="Android逆向工具：Androguard（一）" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Android逆向工具：Androguard（一）</h1>
+
+  <div class="entry">
+    <p>本文介绍一下Androguard的安装和使用。</p>
+
+<h3 id="什么是androguard">什么是Androguard？</h3>
+
+<p>Androguard是使用Python编写的逆向工具，它可以在多个平台上运行－Linux/Windows/OSX。使用它可以反编译android应用，也可以用来做android app的静态分析（static analysis）。</p>
+
+<h3 id="下载安装androguard">下载安装Androguard</h3>
+
+<p>这里只介绍了在Linux上的安装步骤。我使用的是Kali Linux，其他Linux发行版同样适用。</p>
+
+<p>确保系统中已安装了Python；一般Linux系统都自带Python。</p>
+
+<p>安装IPython和pygments：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># pip install ipython</span>
+<span class="c"># pip install pygments</span></code></pre></figure>
+
+<p>Androguard的源码托管在github，使用git clone下载源码：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># git clone https://github.com/androguard/androguard.git</span></code></pre></figure>
+
+<p>安装androguard：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># cd androguard</span>
+<span class="c"># python setup.py install</span></code></pre></figure>
+
+<p>我在使用最新源码时，遇到如下错误：</p>
+
+<blockquote>
+  <p>Python.utils.traitlets.TraitError: The ‘config’ trait of an InteractiveShellEmbed instance must be a Config or None, but a value of class ‘traitlets.config.loader.Config’ (i.e. {}) was specified.</p>
+</blockquote>
+
+<p>使用v2.0版本没有问题：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># git checkout v2.0    (最新稳定版本是v2.0)</span>
+<span class="c"># python setup.py install</span></code></pre></figure>
+
+<h3 id="使用androguard反编译一个应用程序">使用Androguard反编译一个应用程序</h3>
+
+<p>Androguard支持3个反编译工具：</p>
+
+<ul>
+  <li>DAD</li>
+  <li>dex2jar + jad</li>
+  <li>DED</li>
+</ul>
+
+<p>下面我使用DAD反编译一个android应用：</p>
+
+<p>1）运行androlyze：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># androlyze.py -s</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-16%2017-35-41.png" alt="Androguard" /></p>
+
+<p>2）反编译apk文件</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">a</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">dx</span> <span class="o">=</span> <span class="n">AnalyzeAPK</span><span class="p">(</span><span class="s">"path/apk"</span><span class="p">,</span> <span class="n">decompiler</span><span class="o">=</span><span class="s">"dad"</span><span class="p">)</span></code></pre></figure>
+
+<p>3）查看app的所有Activity</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">a</span><span class="o">.</span><span class="n">get_activities</span><span class="p">()</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-16%2017-44-59.png" alt="Androguard" /></p>
+
+<p>4）查看应用的权限</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">a</span><span class="o">.</span><span class="n">get_permissions</span><span class="p">()</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-16%2017-48-25.png" alt="Androguard" /></p>
+
+<p>5）其他方法</p>
+
+<p>获得程序中所有类名：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">d</span><span class="o">.</span><span class="n">get_classes_names</span><span class="p">()</span></code></pre></figure>
+
+<p>获得程序中定义的字符串：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">d</span><span class="o">.</span><span class="n">get_strings</span><span class="p">()</span></code></pre></figure>
+
+<p>获得程序中定义方法：</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">d</span><span class="o">.</span><span class="n">get_methods</span><span class="p">()</span></code></pre></figure>
+
+<hr />
+
+<p>Androguard文档：http://doc.androguard.re/html/index.html</p>
+
+<hr />
+
+<p><a href="../reversing-engineering-android-androguard2/index.html">Android逆向工具：Androguard（二）</a></p>
+
+<p><a href="../android-reversing-remove-ad/index.html">移除Android应用广告－Android逆向工程</a></p>
+
+<p><a href="../android-reversing-env-setup/index.html">Android逆向工程基本环境设置</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 16, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/reversing-engineering-android-androguard/',
+		  'title': 'Android逆向工具：Androguard（一）'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/reversing-engineering-android-androguard/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:21:56 GMT -->
+</html>

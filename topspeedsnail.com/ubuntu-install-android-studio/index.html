@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/ubuntu-install-android-studio/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:30:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>在Ubuntu上安装Android Studio</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="什么是Android Studio？
+
+" />
+    <meta property="og:description" content="什么是Android Studio？
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="在Ubuntu上安装Android Studio" />
+    <meta property="twitter:title" content="在Ubuntu上安装Android Studio" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>在Ubuntu上安装Android Studio</h1>
+
+  <div class="entry">
+    <p>什么是Android Studio？</p>
+
+<p><strong>Android Studio</strong> 是google官方的集成开发环境（IDE），它是用来开发Android应用程序的，基于 <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a></p>
+
+<p><strong>在Ubuntu上安装Android Studio</strong></p>
+
+<p>最简单的方法是使用PPA。多谢webupd8team制作的PPA。</p>
+
+<p>Android Studio的需要JDK 7或JDK 8。 让我们先来安装JDK。</p>
+
+<p>执行如下命令，添加PPA：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo add-apt-repository ppa:webupd8team/java</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo apt-get update</code></pre></figure>
+
+<p>安装JDK 7：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo apt-get install oracle-java7-installer</code></pre></figure>
+
+<p>如果你要使用JDK 8，执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">sudo apt-get install oracle-java8-installer</code></pre></figure>
+
+<p>安装过程中需要接受协议，选择OK：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2016.06.57.png" alt="jdk 7" /></p>
+
+<p>选择Yes：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2016.09.06.png" alt="jdk 7" /></p>
+
+<p>等待安装完成。</p>
+
+<p>安装完之后，检查JDK是否正确安装。查看Jdk版本：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>java -version</code></pre></figure>
+
+<p>你应该能看到java版本信息：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>java version "1.7.0_80"
+Java(TM) SE Runtime Environment (build 1.7.0_80-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)
+</code></pre>
+</div>
+
+<p>下面我们来安装Android Studio，添加PPA：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo add-apt-repository ppa:paolorotolo/android-studio</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo apt-get update</code></pre></figure>
+
+<p>安装Android Studio：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo apt-get install android-studio</code></pre></figure>
+
+<p>安装完成之后，从菜单启动Android Studio（如果菜单没有，可以重启试试）。在第一次启动时，Android Studio会启动一个设置向导，引导你完成adnroid sdk、android模拟器和其他组件的下载和安装。</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2021.57.22.png" alt="Android Studio" /></p>
+
+<p>Next：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2021.58.24.png" alt="Android Studio" /></p>
+
+<p>Next：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2021.59.28.png" alt="Android Studio" /></p>
+
+<p>Next：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2022.00.23.png" alt="Android Studio" /></p>
+
+<p>Finish：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2022.01.24.png" alt="Android Studio" /></p>
+
+<p>等待andorid sdk安装完成。</p>
+
+<p>Android studio的样子：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2022.02.57.png" alt="Android Studio" /></p>
+
+<p>现在，开始开发android app吧。</p>
+
+  </div>
+
+  <div class="date">
+    Written on March 25, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/ubuntu-install-android-studio/',
+		  'title': '在Ubuntu上安装Android Studio'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/ubuntu-install-android-studio/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:31:20 GMT -->
+</html>

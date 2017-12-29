@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/metasploit-search-email-collector/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:51:35 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用Metasploit收集邮箱信息</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="关于Metasploit的另两个帖子：
+
+" />
+    <meta property="og:description" content="关于Metasploit的另两个帖子：
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用Metasploit收集邮箱信息" />
+    <meta property="twitter:title" content="使用Metasploit收集邮箱信息" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用Metasploit收集邮箱信息</h1>
+
+  <div class="entry">
+    <p>关于Metasploit的另两个帖子：</p>
+
+<ul>
+  <li><a href="../kali-linux-n-hack-windows-xp/index.html">演示使用Metasploit入侵Windows</a></li>
+  <li><a href="../kali-linux-metasploit-hack-android/index.html">演示使用Metasploit入侵Android</a></li>
+</ul>
+
+<p>Metasploit提供了很多辅助的模块，非常实用。今天介绍一个叫search_email_collector的模块，它的功能是查找搜索引擎（google、bing、yahoo），收集和某个域名有关的邮箱地址。</p>
+
+<h3 id="使用步骤">使用步骤：</h3>
+
+<p>启动msfconsole：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># service postgresql start</span>
+<span class="c"># msfconsole</span></code></pre></figure>
+
+<p>搜索模块：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>msf &gt; search gather auxiliary
+</code></pre>
+</div>
+
+<p>找到search_email_collector：</p>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-12%20at%2011.17.28.png" alt="使用Metasploit收集邮箱信息" /></p>
+
+<p>使用search_email_collector：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>msf &gt; use auxiliary/gather/search_email_collector
+</code></pre>
+</div>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-12%20at%2011.21.00.png" alt="使用Metasploit收集邮箱信息" /></p>
+
+<p>注：如果你不能使用google搜素，把SEARCH_GOOGLE设置为false：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> &gt; set SEARCH_GOOGLE false
+</code></pre>
+</div>
+
+<p>要收集某个域名的邮箱信息：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt; set DOMAIN your_target.com
+</code></pre>
+</div>
+
+<p>开始收集：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt; run
+</code></pre>
+</div>
+
+<p>由于使用搜索引擎，所以并不保证100%可靠。</p>
+
+<p>黑客可以利用这些信息进行网络钓鱼，骗取个人信息。其实这种攻击是社会工程学攻击中最不危险的一种。</p>
+
+<p>类似的工具还有theharvester：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># theharvester
+# theharvester -d microsoft.com -l 500 -b google -h myresults.html
+# theharvester -d microsoft.com -b pgp
+# theharvester -d microsoft -l 200 -b linkedin
+# theharvester -d apple.com -b googleCSE -l 500 -s 300
+</code></pre>
+</div>
+
+  </div>
+
+  <div class="date">
+    Written on May 10, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/metasploit-search-email-collector/',
+		  'title': '使用Metasploit收集邮箱信息'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/metasploit-search-email-collector/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:52:01 GMT -->
+</html>

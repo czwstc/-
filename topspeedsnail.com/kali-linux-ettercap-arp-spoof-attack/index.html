@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-ettercap-arp-spoof-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:18:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Kali Linux ettercap的使用</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="ettercap是执行ARP欺骗嗅探的工具，通常用它来施行中间人攻击。
+
+" />
+    <meta property="og:description" content="ettercap是执行ARP欺骗嗅探的工具，通常用它来施行中间人攻击。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Kali Linux ettercap的使用" />
+    <meta property="twitter:title" content="Kali Linux ettercap的使用" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Kali Linux ettercap的使用</h1>
+
+  <div class="entry">
+    <p>ettercap是执行ARP欺骗嗅探的工具，通常用它来施行中间人攻击。</p>
+
+<p>我还介绍过另一个arp欺骗工具-arpspoof：</p>
+
+<ul>
+  <li><a href="../kali-linux-preform-man-in-middle-attack/index.html">使用Kali Linux执行中间人攻击</a></li>
+</ul>
+
+<p>我使用的是Kali Linux 2.0；在开始使用ettercap之前，先配置一下：</p>
+
+<p>编辑配置文件/etc/ettercap/etter.conf：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># vim /etc/ettercap/etter.conf</span></code></pre></figure>
+
+<p>找到privs一段，改为：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ec_uid = 0                # nobody is the default
+ec_gid = 0                # nobody is the default
+</code></pre>
+</div>
+
+<p>在176行”if you use iptables”，去掉注释：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    redir_command_on = "iptables -t nat -A PREROUTING -i %iface -p tcp --dpor    t %port -j REDIRECT --to-port %rport"
+    redir_command_off = "iptables -t nat -D PREROUTING -i %iface -p tcp --dpo    rt %port -j REDIRECT --to-port %rport"
+</code></pre>
+</div>
+
+<p>保存退出。</p>
+
+<p>如果你没有打开端口转发，打开方法：</p>
+
+<ul>
+  <li><a href="http://blog.topspeedsnail.com/archives/4384">Linux开启端口转发</a></li>
+</ul>
+
+<hr />
+
+<p>ettercap图形用户界面：Applications-&gt;Sniffing &amp; Spoofing-&gt;ettercap-graphical：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2021-57-41.png" alt="Kali Linux ettercap" /></p>
+
+<p>Options菜单里确保选择Promisc mode；</p>
+
+<p>Sniff菜单中选择Unified sniffing：选择使用的网络接口，我使用wlan0；如果你使用有线，选择eth0；</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2022-04-44.png" alt="Kali Linux ettercap" /></p>
+
+<p>Host-&gt;Scan for hosts，扫描当前网络中的所有主机。</p>
+
+<p>Host-&gt;Host list，扫描到的主机列表：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2022-14-28.png" alt="Kali Linux ettercap" /></p>
+
+<p>然后我们就可以选择要攻击的目标了，例如，选择192.168.0.105的IP地址，点击Add to Target 1（添加到目标1）,然后选择网关的IP地址192.168.0.1，点击Add to Target 2（添加到目标2）。所有从192.168.0.105发送的数据都会经过Kali Linux。</p>
+
+<p>如果还要截获发送给192.168.0.105的数据，把192.168.0.1添加到Target 1，192.168.0.105添加到Target 2，这实现双向监听数据。</p>
+
+<p>可以添加多个主机。</p>
+
+<p>查看添加的攻击目标：Targets-&gt;Current targets：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-18%2022-25-05.png" alt="Kali Linux ettercap" /></p>
+
+<p>再次确保已开启端口转发，有时会自己关上，不知道为什么：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># echo '1' &gt; /proc/sys/net/ipv4/ip_forward</span></code></pre></figure>
+
+<p>开始攻击：Mitm-&gt;ARP Poisoning，选择参数，Sniff remote connections。</p>
+
+<p>这个时候目标主机的所有流量都是通过攻击者的主机出去的，想抓啥就抓啥。</p>
+
+<p>和Wireshark配合使用：</p>
+
+<ul>
+  <li><a href="../wireshark-hack-http-post-password/index.html">在Wifi网络中嗅探明文密码(HTTP POST请求)</a></li>
+</ul>
+
+<hr />
+
+<p>ettercap命令行工具就不解释了。看man手册就成了。</p>
+
+  </div>
+
+  <div class="date">
+    Written on April 18, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-ettercap-arp-spoof-attack/',
+		  'title': 'Kali Linux ettercap的使用'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-ettercap-arp-spoof-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:19:10 GMT -->
+</html>

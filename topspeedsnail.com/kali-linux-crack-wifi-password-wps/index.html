@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-crack-wifi-password-wps/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:54:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用Reaver破解开启了WPS功能的wifi密码(wpa/wpa2)</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="来自wikipeida：
+
+" />
+    <meta property="og:description" content="来自wikipeida：
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用Reaver破解开启了WPS功能的wifi密码(wpa/wpa2)" />
+    <meta property="twitter:title" content="使用Reaver破解开启了WPS功能的wifi密码(wpa/wpa2)" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用Reaver破解开启了WPS功能的wifi密码(wpa/wpa2)</h1>
+
+  <div class="entry">
+    <p>来自wikipeida：</p>
+
+<blockquote>
+  <p>Wi-Fi保护设置（简称WPS，全称Wi-Fi Protected Setup）是一个无线网络安全标准，旨在让家庭用户使用无线网络时简化加密步骤。此标准由Wi-Fi联盟（Wi-Fi Alliance）于2006年制定。</p>
+
+  <p>在2011年12月28日安全专家Stefan Viehbock报出此标准的一个重大安全漏洞，此漏洞允许远程攻击者使用暴力攻击在几小时内就能获取WPS的PIN码和WPA/WPA2的PSK码。一些新出产的无线路默认启动WPS功能，所以现在建议用户关闭无线路由器上的WPS一键加密功能，虽然有些无线器上无法关闭此功能。</p>
+</blockquote>
+
+<p>WPS的目的是简化用户输入密码的步骤；在某个设备连接wifi，需要输入密码时，只要按一下无线路由器上的wps按钮就可以了。</p>
+
+<p>Reaver是除字典破解之外的另一个选择：</p>
+
+<ul>
+  <li><a href="../kali-linux-crack-wifi-wpa/index.html">Kali Linux使用Aircrack破解wifi密码(wpa/wpa2)</a></li>
+</ul>
+
+<p>如果无线路由器开启了WPS，就不必使用上面的破解方法了。</p>
+
+<p>WPS的pin码并没有加密。Reaver会暴力破解pin码，找到pin码也就找到了密码。一般用时也不短。</p>
+
+<p>注意：</p>
+
+<ul>
+  <li>网卡支持数据包注入，一般笔记本不支持</li>
+  <li>要求无线信号强</li>
+  <li>如果发送pin码过快，有可能造成路由器崩溃；就类似对服务器的DDOS攻击。</li>
+  <li>Reaver有很多选项，我只使用最基本的选项，你也许需要根据情况使用其他选项。查看帮助：reaver ?</li>
+</ul>
+
+<p>执行<a href="../kali-linux-crack-wifi-wpa/index.html">Kali Linux使用Aircrack破解wifi密码(wpa/wpa2)</a>中的前三步，打开无线网卡的的监控模式。</p>
+
+<h3 id="3找到开启wps功能的无线路由器">3）找到开启WPS功能的无线路由器</h3>
+
+<p>我们不用逐一测试，而是使用wash命令。</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># wash -i wlan0mon -C</span></code></pre></figure>
+
+<p>如果什么也没有表示周围没有开启WPS的无线路由器。记住要破解wifi的BSSID。</p>
+
+<h3 id="4开始破解密码">4）开始破解密码</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># reaver -i wlan0mon -b C8:3A:35:30:3E:C8 -vv -a</span></code></pre></figure>
+
+<p>等待2-10小时：</p>
+
+<p>最后，不要忘了结束无线网卡的监控模式：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airmon-ng stop wlan0mon</span></code></pre></figure>
+
+<hr />
+
+<p>总结：wps这个功能不用就把它关闭了吧。</p>
+
+<hr />
+
+<p>一个小实验：</p>
+
+<p>我看到有人说隐藏SSID可以让wifi更不容易被破解，我就来测试一下。</p>
+
+<blockquote>
+  <p>隐藏SSID就是把你老大的AP隐藏起来，不让别人搜索到。请注意，这样的话，在连接wifi时就要手动输入AP名。</p>
+</blockquote>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-22%2015-45-17.png" alt="破解wifi密码" /></p>
+
+<p>只看到了 length 12，没有ap名。</p>
+
+<p>查看方法：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airodump-ng -c 6 --bssid C8:3A:35:30:3E:C8 wlan0mon</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># aireplay-ng -0 30 -a C8:3A:35:30:3E:C8 -c B8:E8:56:09:CC:9C wlan0mon</span></code></pre></figure>
+
+<p>破解密码的方法不变；使用上面两个命令就可以轻松得到ap名。</p>
+
+<p>事实证明，隐藏SSID并不管啥事；其实设置一个复杂的密码比隐藏SSID要管用的多。</p>
+
+  </div>
+
+  <div class="date">
+    Written on April 22, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-crack-wifi-password-wps/',
+		  'title': '使用Reaver破解开启了WPS功能的wifi密码(wpa/wpa2)'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-crack-wifi-password-wps/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:54:33 GMT -->
+</html>

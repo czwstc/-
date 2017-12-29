@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/crack-pdf-password-use-pdfcrack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:47:03 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用pdfcrack破解PDF密码(Linux)</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="pdfcrack是破解PDF保护密码的Linux命令行工具。
+
+" />
+    <meta property="og:description" content="pdfcrack是破解PDF保护密码的Linux命令行工具。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用pdfcrack破解PDF密码(Linux)" />
+    <meta property="twitter:title" content="使用pdfcrack破解PDF密码(Linux)" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用pdfcrack破解PDF密码(Linux)</h1>
+
+  <div class="entry">
+    <p>pdfcrack是破解PDF保护密码的Linux命令行工具。</p>
+
+<h3 id="安装pdfcrack">安装pdfcrack</h3>
+
+<p>Debian系列：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># apt install pdfcrack</span></code></pre></figure>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-26%20at%2009.09.08.png" alt="破解PDF密码" /></p>
+
+<h3 id="暴力破解">暴力破解</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># pdfcrack -f filename.pdf -n 6 -m 8 -c 0123456789</span></code></pre></figure>
+
+<p>暴力破解密码是漫长单调的过程。</p>
+
+<p>上面使用的参数解释：</p>
+
+<ul>
+  <li>-n：密码最短多少个字符</li>
+  <li>-m：密码最长多少个字符</li>
+  <li>-c：使用的字符集</li>
+</ul>
+
+<p>更多选项，查看帮助：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># man pdfcrack</span></code></pre></figure>
+
+<p>你可以随时使用 Ctrl+c 终止破解，它会保存破解的进度，下次继续在终止的地方执行。</p>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-26%20at%2009.25.11.png" alt="破解PDF密码" /></p>
+
+<h3 id="使用密码字典">使用密码字典</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># pdfcrack -f high.pdf -w wordlist.txt</span></code></pre></figure>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-26%20at%2009.30.58.png" alt="破解PDF密码" /></p>
+
+  </div>
+
+  <div class="date">
+    Written on May 25, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/crack-pdf-password-use-pdfcrack/',
+		  'title': '使用pdfcrack破解PDF密码(Linux)'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/crack-pdf-password-use-pdfcrack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:47:11 GMT -->
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/reversing-engineering-android-other/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:19:51 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Android逆向工具(三)</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="本节介绍如下4个工具：
+
+" />
+    <meta property="og:description" content="本节介绍如下4个工具：
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Android逆向工具(三)" />
+    <meta property="twitter:title" content="Android逆向工具(三)" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Android逆向工具(三)</h1>
+
+  <div class="entry">
+    <p>本节介绍如下4个工具：</p>
+
+<ul>
+  <li>Smali/Baksmali</li>
+  <li>Simplify</li>
+  <li>Androwarn</li>
+  <li>APKAnalyser</li>
+</ul>
+
+<h2 id="smalibaksmali">Smali/Baksmali</h2>
+
+<p>smali/baksmali是dalvik使用的dex格式的编译／反编译工具，dalvik是Android Java虚拟机的实现。</p>
+
+<p>Android开发者写的Java代码最终会编译为.dex（Dalvik Executable）文件，并打包进apk文件。为了解码一个apk文件，我们需要提取.dex文件，dex是二进制格式，不可读，还需要转换为Smali语言。</p>
+
+<p>.dex ———-&gt; smali &lt;————- Java源码</p>
+
+<p>smali项目地址：https://github.com/JesusFreke/smali</p>
+
+<p>下载Smali和BakSmali jar文件：https://bitbucket.org/JesusFreke/smali/downloads</p>
+
+<p><em>使用baksmali反编译.dex文件</em></p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-17%2022-52-41.png" alt="baksmali" /></p>
+
+<p>命令语法：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># baksmali -o &lt;output&gt; &lt;classes.dex&gt;</span></code></pre></figure>
+
+<p><em>使用smali把.smali文件编译回.dex</em></p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-17%2023-07-13.png" alt="baksmali" /></p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># smali output -o classes.dex </span></code></pre></figure>
+
+<h2 id="simplify">Simplify</h2>
+
+<p>开发者为了防止自己的劳动成果被别人窃取，混淆代码能有效防止被他人破解，让代码更难理解。有时，混淆还能帮助隐藏恶意代码。也就是说我们需要反混淆。</p>
+
+<p>Simplify是代码反混淆工具，输入Smali文件，生成.dex文件；然后使用<a href="https://github.com/pxb1988/dex2jar">Dex2Jar</a>或<a href="http://jd.benow.ca/">JD-GUI</a>或其他Java反编译工具提取dex文件内容。</p>
+
+<p>Simplify的项目地址：https://github.com/CalebFenton/simplify，在README中有使用方法。</p>
+
+<h2 id="androwarn">Androwarn</h2>
+
+<p>Androwarn是使用Smali的静态分析工具，它扫描应用的字节码，然后生成报告，</p>
+
+<blockquote>
+  <p>Androwarn is a tool whose main aim is to detect and warn the user about potential malicious behaviours developped by an Android application.</p>
+
+  <p>The detection is performed with the static analysis of the application’s Dalvik bytecode, represented as Smali.</p>
+
+  <p>This analysis leads to the generation of a report, according to a technical detail level chosen from the user.</p>
+</blockquote>
+
+<p>项目地址：https://github.com/maaaaz/androwarn/</p>
+
+<h2 id="apkanalyser">APKAnalyser</h2>
+
+<p>APKAnalyser是带图形用户界面的静态代码分析工具，包括Smali和APKTool等工具。</p>
+
+<p>项目地址：https://github.com/sonyxperiadev/ApkAnalyser</p>
+
+<hr />
+
+<p><a href="../android-reversing-env-setup/index.html">Android逆向工程基本环境设置</a></p>
+
+<p><a href="../android-reversing-remove-ad/index.html">移除Android应用广告－Android逆向工程</a></p>
+
+<p><a href="../reversing-engineering-android-androguard/index.html">Android逆向工具：Androguard（一）</a></p>
+
+<p><a href="../reversing-engineering-android-androguard2/index.html">Android逆向工具：Androguard（二）</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 17, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/reversing-engineering-android-other/',
+		  'title': 'Android逆向工具(三)'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/reversing-engineering-android-other/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:20:13 GMT -->
+</html>

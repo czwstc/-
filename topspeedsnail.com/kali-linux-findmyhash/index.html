@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-findmyhash/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:56:03 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Kali Linux - findmyhash命令-破解哈希值</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="哈希密码就是对口令进行一次性的加密处理（哈希算法）而形成的杂乱字符串，人们认为从哈希串中是不可能还原出原口令的。
+
+" />
+    <meta property="og:description" content="哈希密码就是对口令进行一次性的加密处理（哈希算法）而形成的杂乱字符串，人们认为从哈希串中是不可能还原出原口令的。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Kali Linux - findmyhash命令-破解哈希值" />
+    <meta property="twitter:title" content="Kali Linux - findmyhash命令-破解哈希值" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Kali Linux - findmyhash命令-破解哈希值</h1>
+
+  <div class="entry">
+    <p>哈希密码就是对口令进行一次性的加密处理（哈希算法）而形成的杂乱字符串，人们认为从哈希串中是不可能还原出原口令的。</p>
+
+<p>‘test’使用md5哈希加密后-&gt;’098f6bcd4621d373cade4e832627b4f6’</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-21%20at%2012.13.31.png" alt="findmyhash" /></p>
+
+<p>所谓破解要么使用字典攻击法，要么采用穷举法，这两种方法都要靠运气。</p>
+
+<ul>
+  <li><a href="../John-the-Ripper-learn/index.html">Kali Linux：使用John the Ripper破解密码</a></li>
+</ul>
+
+<p>findmyhash另辟蹊径，它借助在线破解哈希的网站，可以在极短的时间内得到密码。当然，它也不能做到100%破解。</p>
+
+<p>直接执行findmyhash，查看帮助信息：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># findmyhash</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-21%20at%2012.41.28.png" alt="findmyhash" /></p>
+
+<p>如破解上面的MD5哈希串’098f6bcd4621d373cade4e832627b4f6’：</p>
+
+<ul>
+  <li><a href="../identifier-hash-type/index.html">判断hash值的加密类型</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># findmyhash MD5 -h 098f6bcd4621d373cade4e832627b4f6</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-21%2009-13-40.png" alt="findmyhash" /></p>
+
+<p>如果findmyhash破解不了，可以使用hashcat暴力破解。</p>
+
+  </div>
+
+  <div class="date">
+    Written on April 20, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-findmyhash/',
+		  'title': 'Kali Linux - findmyhash命令-破解哈希值'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-findmyhash/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:16:21 GMT -->
+</html>

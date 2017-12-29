@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/How-to-use-lynis-on-linux/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:33:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>安装使用lynis扫描Linux的安全漏洞</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Lynis是Linux平台上的一款安全漏洞扫描工具。它可以扫描系统的安全漏洞、收集系统信息、安装的软件信息、配置问题、没有设置密码的用户和防火墙等等。
+
+" />
+    <meta property="og:description" content="Lynis是Linux平台上的一款安全漏洞扫描工具。它可以扫描系统的安全漏洞、收集系统信息、安装的软件信息、配置问题、没有设置密码的用户和防火墙等等。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="安装使用lynis扫描Linux的安全漏洞" />
+    <meta property="twitter:title" content="安装使用lynis扫描Linux的安全漏洞" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>安装使用lynis扫描Linux的安全漏洞</h1>
+
+  <div class="entry">
+    <p><strong>Lynis</strong>是Linux平台上的一款安全漏洞扫描工具。它可以扫描系统的安全漏洞、收集系统信息、安装的软件信息、配置问题、没有设置密码的用户和防火墙等等。</p>
+
+<p>Lynis是流行可靠的安全扫描工具。</p>
+
+<p>前不久，Lynis更新了版本，Lynis发布了2.2.0。在这个版本上增加了新的特性和一些小的功能提升。我建议使用Lynis的最新版本2.2.0。</p>
+
+<p>下面我在Ubuntu上安装Lynis 2.2.0。</p>
+
+<h3 id="安装lynis">安装Lynis</h3>
+
+<p>Lynis可以安装在系统中的任意目录，创建一个目录<code class="highlighter-rouge">/opt/lynis</code>：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo mkdir /opt/lynis</code></pre></figure>
+
+<p>使用wget下载Lynis：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span><span class="nb">cd</span> /opt/lynis
+<span class="gp">$ </span>sudo wget https://cisofy.com/files/lynis-2.2.0.tar.gz</code></pre></figure>
+
+<p>解压下载的tar包：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo tar -xvf lynis-2.2.0.tar.gz</code></pre></figure>
+
+<h3 id="使用lynis">使用Lynis</h3>
+
+<p>运行lynis需要root权限，执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span><span class="nb">cd </span>lynis
+<span class="gp">$ </span>sudo ./lynis</code></pre></figure>
+
+<p>不给指定参数，它会列出可用的参数，如下图：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-22%20at%2010.31.44.png" alt="lynis" /></p>
+
+<p>为了执行Lynis，你可以指定<code class="highlighter-rouge">--check-all</code>开始扫描整个Linux系统。命令如下：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo ./lynis --check-all</code></pre></figure>
+
+<p>键入回车开始扫描系统：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-22%20at%2010.45.38.png" alt="lynis scan" /></p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-22%20at%2010.48.18.png" alt="lynis scan" /></p>
+
+<p>执行上面命令总需要输入回车才能往下执行，你可以使用-c和-Q选项跳过用户输入：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo ./lynis -c -Q</code></pre></figure>
+
+<h3 id="创建lynis计划任务cron-job">创建Lynis计划任务－cron job</h3>
+
+<p>如果你想为你的系统创建一个日扫描报告，你可以设置cron：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>crontab -e</code></pre></figure>
+
+<p>添加cron任务：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">30	22	<span class="k">*</span>	<span class="k">*</span>	<span class="k">*</span>	root    /opt/lynis -c -Q --auditor <span class="s2">"automated"</span> --cronjob</code></pre></figure>
+
+<p>上面任务每天晚上10:30会执行扫描，并把输出的信息保存到<code class="highlighter-rouge">/var/log/lynis.log</code>日志文件中。</p>
+
+  </div>
+
+  <div class="date">
+    Written on March 22, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/How-to-use-lynis-on-linux/',
+		  'title': '安装使用lynis扫描Linux的安全漏洞'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/How-to-use-lynis-on-linux/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:33:26 GMT -->
+</html>

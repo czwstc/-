@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/intro-image-webp-format/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:32:56 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用WebP图像格式</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="WebP，它的非官方发音web屁。它是google在5年前开发的一种图像格式，主要面向web。如果你是web设计人员或软件开发人员，并且需要优化减少图片大小，那么WebP是最好的选择。
+
+" />
+    <meta property="og:description" content="WebP，它的非官方发音web屁。它是google在5年前开发的一种图像格式，主要面向web。如果你是web设计人员或软件开发人员，并且需要优化减少图片大小，那么WebP是最好的选择。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用WebP图像格式" />
+    <meta property="twitter:title" content="使用WebP图像格式" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用WebP图像格式</h1>
+
+  <div class="entry">
+    <p>WebP，它的非官方发音<em>web屁</em>。它是google在5年前开发的一种图像格式，主要面向web。如果你是web设计人员或软件开发人员，并且需要优化减少图片大小，那么WebP是最好的选择。</p>
+
+<p>WebP图像格式的特点总结如下：</p>
+
+<ul>
+  <li>WebP图像文件的扩展名是 <strong><em>.webp</em></strong></li>
+  <li>WebP支持无损和有损压缩</li>
+  <li>WebP无损压缩图像可以比JPEG图像格式小25-34%</li>
+  <li>WebP有损压缩图像可以比png图像格式小25%。</li>
+  <li>WebP支持透明度，alpha</li>
+  <li>WebP支持动画，GIF动态图</li>
+</ul>
+
+<p>总而言之，和JPEG，GIF，PNG格式相比，WebP可以显著的减少图像文件大小，这也是WebP非常适合应用在web上的原因（它节省了带宽，提高网页加载速度）。</p>
+
+<p>下面我对几种常用图像进行了对比，实际看一下WebP的优势。</p>
+
+<h3 id="一个小对比实验">一个小对比实验</h3>
+
+<p>比较JPEG，PNG和GIF图像转换为WebP图像，文件大小对比。</p>
+
+<p>随便找一个JPEG图像。原始文件大小2.2M。</p>
+
+<p><img src="../images/2016/3/8fffa491jw1f2rdfughnkj21000qoth9.jpg" alt="jpeg pic" /></p>
+
+<p>使用转换工具转换，这里有几个工具：<a href="http://blog.topspeedsnail.com/archives/4032">转换WebP工具</a>。</p>
+
+<p>转换完成的webp图像，大小965k。</p>
+
+<h3 id="览器的支持">览器的支持</h3>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-23%20at%2015.48.12.png" alt="webp 浏览器支持" /></p>
+
+<p>浏览器Chrome对webp的支持最好，毕竟是google自家的东西。FireFox和Safari还不支持webp，但是你可以使用 <a href="http://webpjs.appspot.com/">WebPJS</a> JavaScript库把WebP转换为data URI。</p>
+
+<h3 id="判断如果浏览器不支持webp格式转用jpgpng格式">判断，如果浏览器不支持webp格式，转用jpg/png格式</h3>
+
+<p>为了避免浏览器因为不支持webp而造成的图片加载错误，可以进行一下判断，代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;picture&gt;</span>
+    source srcset="example.webp 1x" type="image/webp"&gt;
+    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"example.jpg"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/picture&gt;</span></code></pre></figure>
+
+<p>如果使用的是Firefox或Safari，会加载example.jpg。</p>
+
+<blockquote>
+  <p>更多资源</p>
+
+  <p>Photoshop webp插件：<a href="http://telegraphics.com.au/sw/product/WebPFormat">WebPFormat</a></p>
+
+  <p>WebP图像浏览器：<a href="https://github.com/emin/WebPQuickLook">Mac OS X</a>，<a href="https://developers.google.com/speed/webp/docs/webp_codec?hl=en">Windows</a></p>
+
+  <p><a href="http://image.online-convert.com/convert-to-webp">webp在线转换工具</a></p>
+</blockquote>
+
+  </div>
+
+  <div class="date">
+    Written on March 23, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/intro-image-webp-format/',
+		  'title': '使用WebP图像格式'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/intro-image-webp-format/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:33:00 GMT -->
+</html>

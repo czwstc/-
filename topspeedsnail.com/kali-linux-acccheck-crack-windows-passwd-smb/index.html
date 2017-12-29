@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-acccheck-crack-windows-passwd-smb/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:16:21 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Kali Linux使用acccheck破解Windows用户密码(SMB协议)</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="acccheck是设计用来破解使用SMB协议的Windows用户密码的。
+
+" />
+    <meta property="og:description" content="acccheck是设计用来破解使用SMB协议的Windows用户密码的。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Kali Linux使用acccheck破解Windows用户密码(SMB协议)" />
+    <meta property="twitter:title" content="Kali Linux使用acccheck破解Windows用户密码(SMB协议)" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Kali Linux使用acccheck破解Windows用户密码(SMB协议)</h1>
+
+  <div class="entry">
+    <p>acccheck是设计用来破解使用SMB协议的Windows用户密码的。</p>
+
+<blockquote>
+  <p>SMB是一种网络通信协议,使用SMB协议可以实现不同类型设备之间数据传递。例如,文件、打印机共享也是基于这个协议。</p>
+</blockquote>
+
+<p>acccheck就是使用perl封装了smbclient命令；</p>
+
+<p>它使用暴力破解的方式试出Windows用户密码。</p>
+
+<hr />
+
+<h3 id="一个简单的例子">一个简单的例子：</h3>
+
+<ul>
+  <li>打开共享的Windows一台；IP，192.168.0.106：</li>
+</ul>
+
+<p><img src="../images/2016/4/Screenshot-20162018.png" alt="acccheck" /></p>
+
+<ul>
+  <li>Kali Linux：</li>
+</ul>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-20%2018-34-08.png" alt="acccheck" /></p>
+
+<p>尝试使用Administrator，空密码：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># acccheck -t 192.168.0.106</span></code></pre></figure>
+
+<p>尝试使用Administrator，密码字典：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># acccheck -t 192.168.0.106 -P password.txt</span></code></pre></figure>
+
+<p>尝试使用用户文件，密码字典：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># acccheck -t 192.168.0.106 -U user.txt -P password.txt</span></code></pre></figure>
+
+<p>使用字典破解一个用户：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># acccheck -t 192.168.0.106 -u tian -P dic.txt</span></code></pre></figure>
+
+<p>结果保存在cracked文件中：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-20%2019-07-34.png" alt="acccheck" /></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 19, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-acccheck-crack-windows-passwd-smb/',
+		  'title': 'Kali Linux使用acccheck破解Windows用户密码(SMB协议)'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-acccheck-crack-windows-passwd-smb/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:16:25 GMT -->
+</html>

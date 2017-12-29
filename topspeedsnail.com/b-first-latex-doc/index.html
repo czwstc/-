@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/b-first-latex-doc/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:30:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>LaTeX简要教程2:第一个基于LaTeX的文档</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="在这篇教程中，我们创建几个基本的LaTeX文档，并对LaTeX语法进行解释。
+
+" />
+    <meta property="og:description" content="在这篇教程中，我们创建几个基本的LaTeX文档，并对LaTeX语法进行解释。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="LaTeX简要教程2:第一个基于LaTeX的文档" />
+    <meta property="twitter:title" content="LaTeX简要教程2:第一个基于LaTeX的文档" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>LaTeX简要教程2:第一个基于LaTeX的文档</h1>
+
+  <div class="entry">
+    <p>在这篇教程中，我们创建几个基本的LaTeX文档，并对LaTeX语法进行解释。</p>
+
+<h3 id="基本的latex文件结构">基本的LaTeX文件结构</h3>
+
+<p>使用LaTeX创建文档是很简单的，它和<strong>MS Word</strong>的不同是，你书写的是包含LaTeX代码和实际内容的纯文本文件（.tex文件）。LaTeX代码控制实际内容的格式/样式。在编译时.tex文件会转换成.pdf文档，例如教程1里的代码：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+    Hello World!
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>编译之后，生成的PDF文档中会有<strong>Hello World!</strong>字样，文档底部的页码也是自动生成的。</p>
+
+<p>让我们来解析一下上面的代码。你可以看到有许多以\开头的语句，这些语句并不是实际的内容，它是LaTeX命令。所有命令都是这种结构：<strong>\command{option}</strong>。command是命令的名字，大括号里的option指定命令使用的参数。</p>
+
+<p>\documentclass{article}：设置文档的种类，这影响文档的基本格式。如果你使用book，它的样式和article是不一样的。</p>
+
+<p>\begin，\end语句：这其实并不是命令，而是定义了环境。begin和end间的环境代表这块区间应用的排版规则。在文档中可以有多个环境，下面代码展示环境的使用方法：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="c">% 正确用法:</span>
+
+<span class="nt">\begin{document}</span>
+  <span class="nt">\begin{environment1}</span>
+    <span class="nt">\begin{environment2}</span>
+    <span class="nt">\end{environment2}</span>
+  <span class="nt">\end{environment1}</span>
+<span class="nt">\end{document}</span>
+
+<span class="c">% 错误用法:</span>
+
+<span class="nt">\begin{document}</span>
+  <span class="nt">\begin{environment1}</span>
+    <span class="nt">\begin{environment2}</span>
+  <span class="nt">\end{environment1}</span>
+    <span class="nt">\end{environment2}</span>
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>% 开头的代码是注释。</p>
+
+<h3 id="丰富页面">丰富页面</h3>
+
+<p>当你的文档中使用数学公式或图表时，你会使用到更多的环境。当然，你也可以自定义环境。LaTeX自带了常用的环境，这些环境使用包（package）引入，后面教程会有说明。</p>
+
+<p>添加更多命令使文档内容更丰富：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="k">\title</span><span class="p">{</span>Hello you<span class="p">}</span>
+<span class="k">\date</span><span class="p">{</span>2015-09-01<span class="p">}</span>
+<span class="k">\author</span><span class="p">{</span>olly shit<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+  <span class="k">\maketitle</span>
+  <span class="k">\newpage</span>
+
+  Hello World!
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>\title、\date和\author并没有在document环境中，所以它们并不会在文档中显示。</p>
+
+<p>\maketitle自动创建“扉页”；\newpage创建新页面。</p>
+
+<p>上面代码生成了两页文档，如下：</p>
+
+<p>第一页：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-27%20at%2011.52.56.png" alt="Latex" /></p>
+
+<p>第二页：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-27%20at%2011.53.06.png" alt="Latex" /></p>
+
+<p>注意，上面创建的文档在扉页上有页码，这不符合文档格式。</p>
+
+<p>我们可以移除第一页的页码，代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="k">\title</span><span class="p">{</span>Hello you<span class="p">}</span>
+<span class="k">\date</span><span class="p">{</span>2015-09-01<span class="p">}</span>
+<span class="k">\author</span><span class="p">{</span>olly shit<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+  <span class="k">\pagenumbering</span><span class="p">{</span>gobble<span class="p">}</span>
+  <span class="k">\maketitle</span>
+  <span class="k">\newpage</span>
+  <span class="k">\pagenumbering</span><span class="p">{</span>arabic<span class="p">}</span>
+
+  Hello World!
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>页码将从第二页文档开始，起始值是数字1。</p>
+
+<p>关于pagenumbering命令的选项：</p>
+
+<ul>
+  <li>gobble：没有页码</li>
+  <li>arabic：阿拉伯数字</li>
+  <li>roman：罗马数字</li>
+</ul>
+
+  </div>
+
+  <div class="date">
+    Written on March 27, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/b-first-latex-doc/',
+		  'title': 'LaTeX简要教程2:第一个基于LaTeX的文档'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/b-first-latex-doc/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:30:07 GMT -->
+</html>

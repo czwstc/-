@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/centos-nginx-haproxy/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:27:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>CentOS 7：使用HAProxy实现Nginx负载均衡</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="HAProxy是一款功能强大、灵活好用的反向代理的开源软件，它提供了负载均衡、服务器代理的功能。HAProxy是Willy Tarreau使用C语言编写的，它支持SSL、压缩、keep-alive、自定义日志格式和header重写。
+
+" />
+    <meta property="og:description" content="HAProxy是一款功能强大、灵活好用的反向代理的开源软件，它提供了负载均衡、服务器代理的功能。HAProxy是Willy Tarreau使用C语言编写的，它支持SSL、压缩、keep-alive、自定义日志格式和header重写。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="CentOS 7：使用HAProxy实现Nginx负载均衡" />
+    <meta property="twitter:title" content="CentOS 7：使用HAProxy实现Nginx负载均衡" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>CentOS 7：使用HAProxy实现Nginx负载均衡</h1>
+
+  <div class="entry">
+    <p>HAProxy是一款功能强大、灵活好用的反向代理的开源软件，它提供了负载均衡、服务器代理的功能。HAProxy是Willy Tarreau使用C语言编写的，它支持SSL、压缩、keep-alive、自定义日志格式和header重写。</p>
+
+<p>HAProxy是轻量级的负载均衡和代理服务软件，占用系统资源较少。很多大型的网站都在使用它，例如Github、StackOverflow。</p>
+
+<p>下面我安装配置HAProxy做为两个Nginx服务器的负载均衡。一共需要使用3个服务器，在一台机器上安装HAProxy，另两台机器安装Nginx服务。</p>
+
+<h1 id="haproxy的基本概念">HAProxy的基本概念</h1>
+
+<h2 id="4层和7层">4层和7层</h2>
+
+<p>HAProxy可以使用两种模式运行：TCP 4层模式和HTTP 7层模式。TCP模式：HAProxy把原始TCP数据包从客户端转向到应用服务器；HTTP模式：解析http请求，然后转向到web服务器。我们将使用HTTP 7层模式。</p>
+
+<h2 id="负载均衡算法">负载均衡算法</h2>
+
+<p>HAProxy使用负载均衡算法决定把请求发送给哪个服务器，使用的算法：</p>
+
+<h3 id="roundrobin轮流算法">Roundrobin－轮流算法</h3>
+
+<p>这是最简单的负载均衡算法。对每个新连接，总是下一个后端服务器处理。如果到达最后一个后端服务器，从头开始。</p>
+
+<h3 id="lastconn">Lastconn</h3>
+
+<p>有最少连接的后端服务器处理新请求。当请求量较大时非常好。</p>
+
+<h3 id="source">Source</h3>
+
+<p>根据客户端IP决定哪个后端服务器处理。如果IP1是server1处理，那么这个IP1的所有请求都由server1处理。根据IP地址的哈希值决定后端服务器。</p>
+
+<h1 id="系统要求">系统要求</h1>
+
+<p>3个CentOS 7服务器：</p>
+
+<ul>
+  <li>处理负载均衡的HAProxy服务器：192.168.0.101</li>
+  <li>Nginx1服务器：192.168.0.108</li>
+  <li>Nginx2服务器：192.168.0.109</li>
+</ul>
+
+<h2 id="第一步">第一步</h2>
+
+<p>编辑HAProxy服务器(102.168.0.101)的/etc/hosts：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">vim /etc/hosts</code></pre></figure>
+
+<p>添加Nginx1和Nginx2的主机名：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>192.168.0.108    nginx1.your_domain.com     nginx1
+192.168.0.109    nginx2.your_domain.com     nginx2
+</code></pre>
+</div>
+
+<p>保存退出。</p>
+
+<p>同样，编辑两个Nginx服务器的/etc/hosts，添加：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>192.168.0.101    loadbalancer
+</code></pre>
+</div>
+
+<p>在两个Nginx服务器上都要设置。</p>
+
+<h2 id="第二步">第二步</h2>
+
+<p>在HAProxy服务器上安装HAProxy：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># yum update</span>
+<span class="c"># yum install haproxy</span></code></pre></figure>
+
+<p>haproxy的配置文件位于/etc/haproxy/。为了防止出错，先备份原始配置文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># cd /etc/haproxy/</span>
+<span class="c"># mv haproxy.cfg haproxy.cfg.backup</span></code></pre></figure>
+
+<p>编辑配置文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># vim haproxy.cfg</span></code></pre></figure>
+
+<p>写入如下内容：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#---------------------------------------------------------------------
+# 全局设置
+#---------------------------------------------------------------------
+global
+    log         127.0.0.1 local2     # 日志
+ 
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000                
+    user        haproxy             # Haproxy在haproxy用户和组下运行
+    group       haproxy
+    daemon
+ 
+    # 开启 stats unix socket
+    stats socket /var/lib/haproxy/stats
+ 
+#---------------------------------------------------------------------
+# 基本设置
+#---------------------------------------------------------------------
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+ 
+#---------------------------------------------------------------------
+# HAProxy Monitoring 配置
+#---------------------------------------------------------------------
+listen haproxy3-monitoring *:8080                # Haproxy Monitoring 的使用端口：8080
+    mode http
+    option forwardfor
+    option httpclose
+    stats enable
+    stats show-legends
+    stats refresh 5s
+    stats uri /stats                            # HAProxy monitoring的网址
+    stats realm Haproxy\ Statistics
+    stats auth testuser:test1234                # 登录Monitoring的用户和密码
+    stats admin if TRUE
+    default_backend app-main
+ 
+#---------------------------------------------------------------------
+# FrontEnd 配置
+#---------------------------------------------------------------------
+frontend main
+    bind *:80
+    option http-server-close
+    option forwardfor
+    default_backend app-main
+ 
+#---------------------------------------------------------------------
+# 使用roundrobin做为负载均衡算法
+#---------------------------------------------------------------------
+backend app-main
+    balance roundrobin                                    # 使用的负载均衡算法
+    option httpchk HEAD / HTTP/1.1\r\nHost:\ localhost    # 检查nginx服务器是否连通- 200状态码
+    server nginx1 192.168.0.108:80 check                  # Nginx1 
+    server nginx2 192.168.0.109:80 check                  # Nginx2
+</code></pre>
+</div>
+
+<p><strong>配置rsyslog</strong></p>
+
+<p>我们需要使用rsyslog记录HAProxy的日志，编辑rsyslog.conf配置文件，打开UDP的514端口：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># vim /etc/rsyslog.conf</span></code></pre></figure>
+
+<p>去掉如下行的注释：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ModLoad imudp
+$UDPServerRun 514
+</code></pre>
+</div>
+
+<p>如果你想指定特定IP，可以更改如下行：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$UDPServerAddress 127.0.0.1
+</code></pre>
+</div>
+
+<p>保存退出。</p>
+
+<p>创建rsyslog配置文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># vim /etc/rsyslog.d/haproxy.conf</span></code></pre></figure>
+
+<p>写入如下内容：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>local2.=info     /var/log/haproxy-access.log    # 访问日志
+local2.notice    /var/log/haproxy-info.log      # haproxy执行信息
+</code></pre>
+</div>
+
+<p>重启rsyslog：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># systemctl restart rsyslog</span></code></pre></figure>
+
+<p>启动HAProxy：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># systemctl start haproxy</span>
+<span class="c"># systemctl enable haproxy</span></code></pre></figure>
+
+<h2 id="第三步">第三步</h2>
+
+<p>安装配置Nginx。</p>
+
+<p>Nginx1和Nginx2服务器配置方法相同。</p>
+
+<p>安装epel-release：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># yum install epel-release</span></code></pre></figure>
+
+<p>安装Nginx：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># yum install nginx</span></code></pre></figure>
+
+<p>创建index.html测试文件，Nginx1(192.168.0.108)：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># cd /usr/share/nginx/html/</span>
+<span class="c"># echo "&lt;h1&gt;nginx1.your_domain.com&lt;/h1&gt;" &gt; index.html</span></code></pre></figure>
+
+<p>Nginx2(192.168.0.109)：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># cd /usr/share/nginx/html/</span>
+<span class="c"># echo "&lt;h1&gt;nginx2.your_domain.com&lt;/h1&gt;" &gt; index.html</span></code></pre></figure>
+
+<p>启动Nginx服务：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># systemctl enable nginx</span>
+<span class="c"># systemctl start nginx</span></code></pre></figure>
+
+<h2 id="测试">测试</h2>
+
+<p>测试nginx1、2，使用浏览器访问：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>192.168.0.108
+192.168.0.109
+</code></pre>
+</div>
+
+<p>正常访问网站：http://192.168.0.101，如果有域名，指向这个IP。</p>
+
+<p>登录HAProxy web管理页面：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://192.168.0.101:8080/stats
+</code></pre>
+</div>
+
+<p>你应该可以看到nginx、http请求的转发信息。</p>
+
+  </div>
+
+  <div class="date">
+    Written on April 10, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/centos-nginx-haproxy/',
+		  'title': 'CentOS 7：使用HAProxy实现Nginx负载均衡'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/centos-nginx-haproxy/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:27:20 GMT -->
+</html>

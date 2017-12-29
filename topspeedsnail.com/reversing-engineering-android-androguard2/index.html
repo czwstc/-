@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/reversing-engineering-android-androguard2/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:20:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Android逆向工具：Androguard（二）</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="在Android逆向工具：Androguard（一）中我们安装了Androguard并且使用基本的命令反编译了apk文件。在这一部分，我将介绍更过Androguard工具：
+
+" />
+    <meta property="og:description" content="在Android逆向工具：Androguard（一）中我们安装了Androguard并且使用基本的命令反编译了apk文件。在这一部分，我将介绍更过Androguard工具：
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Android逆向工具：Androguard（二）" />
+    <meta property="twitter:title" content="Android逆向工具：Androguard（二）" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Android逆向工具：Androguard（二）</h1>
+
+  <div class="entry">
+    <p>在<a href="../reversing-engineering-android-androguard/index.html">Android逆向工具：Androguard（一）</a>中我们安装了Androguard并且使用基本的命令反编译了apk文件。在这一部分，我将介绍更过Androguard工具：</p>
+
+<ul>
+  <li>Androaxml</li>
+  <li>Androsim</li>
+  <li>Androdd</li>
+  <li>Apkviewer</li>
+  <li>Androguard GUI</li>
+</ul>
+
+<h2 id="androaxml">Androaxml</h2>
+
+<p>在做逆向时，AndroidManifest.xml是最重要的文件。使用Androguard中的Androaxml工具，我们可以轻易的获得这个文件。它其实是把二进制格式的XML文件转换为了人可以读的格式。</p>
+
+<p>语法：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># androaxml.py -i &lt;path/apk&gt; -o &lt;output_file&gt; </span></code></pre></figure>
+
+<p>以实际app为例：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># androaxml.py -i test.apk -o output.xml</span>
+<span class="c"># vim output.xml</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-17%2018-35-43.png" alt="androaxml" /></p>
+
+<h2 id="androsim--比较两个apk的相似度">Androsim － 比较两个apk的相似度</h2>
+
+<p>可以用来比较原始的apk和修改后的apk。</p>
+
+<p>在使用Androsim之前，需要安装几个依赖包：</p>
+
+<ul>
+  <li><a href="https://github.com/sparsehash/sparsehash">sparsehash</a>  （Linux configure make 标准源码安装方式）</li>
+  <li><a href="https://github.com/beltoforion/muparser">muparser</a>     （看Install.txt）</li>
+  <li><a href="https://github.com/google/snappy">snappy</a>               (./autogen.sh configure make 标准源码安装方式)</li>
+  <li><a href="http://bzip.org/">bzip2</a></li>
+  <li><a href="http://zlib.net/">zlib</a></li>
+</ul>
+
+<p>比较两个apk文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># androsim.py -i test.apk test.apk -c ZLIB -n</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-17%2019-29-33.png" alt="Androsim" /></p>
+
+<p>上面是两个相同的apk文件；你可以和移除广告后的apk做对比：<a href="../android-reversing-remove-ad/index.html">移除Android应用广告－Android逆向工程</a></p>
+
+<ul>
+  <li>-c：指定压缩的类型 (BZ2, ZLIB, SNAPPY, LZMA, XZ)</li>
+  <li>-d：显示方法</li>
+</ul>
+
+<h2 id="androdd">Androdd</h2>
+
+<p>导出apk文件中所有class文件中的方法。</p>
+
+<p>安装依赖包：</p>
+
+<ul>
+  <li><a href="https://github.com/erocarrera/pydot">pydot</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># androdd.py -i &lt;path/apk&gt; -o &lt;output/dir&gt;</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-17%2020-08-49.png" alt="Androdd" /></p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-17%2020-23-18.png" alt="Androdd" /></p>
+
+<p>图形输出为.ag文件，如果要输出png格式使用-f选项：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># androdd.py -i &lt;path/apk&gt; -o &lt;output/dir&gt; -f png</span></code></pre></figure>
+
+<h2 id="apkviewer">Apkviewer</h2>
+
+<p>GraphML是XML格式，用来显示图例和节点：http://www.openthefile.net/extension/graphml</p>
+
+<p>下载<a href="http://www.yworks.com/en/downloads.html#yEd">yED</a>或<a href="https://gephi.github.io/users/download/">Gephi</a>查看ApkViewer生成的GraphML。</p>
+
+<p>安装依赖包：</p>
+
+<ul>
+  <li><a href="http://networkx.github.io/">NetworkX</a>   (pip install networkx)</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># apkviewer -i &lt;path/apk&gt; -o &lt;output/dir&gt;</span></code></pre></figure>
+
+<h2 id="androgui">androgui</h2>
+
+<p>一个GUI工具。</p>
+
+<p>依赖包：</p>
+
+<ul>
+  <li>PySide    (pip install pyside)-需要qt</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># androgui.py</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-17%2021-53-00.png" alt="androgui" /></p>
+
+<hr />
+
+<p><a href="../android-reversing-env-setup/index.html">Android逆向工程基本环境设置</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 17, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/reversing-engineering-android-androguard2/',
+		  'title': 'Android逆向工具：Androguard（二）'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/reversing-engineering-android-androguard2/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:21:35 GMT -->
+</html>

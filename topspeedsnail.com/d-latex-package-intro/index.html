@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/d-latex-package-intro/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:54 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>LaTeX简要教程4:包(package)－添加更多功能</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="LaTeX默认提供了很多命令，但是有时并不能满足需要，这时就要引入包里面的功能。下面使用equation、amsmath包做例子，它们都可以实现基本的数学公式排版。
+
+" />
+    <meta property="og:description" content="LaTeX默认提供了很多命令，但是有时并不能满足需要，这时就要引入包里面的功能。下面使用equation、amsmath包做例子，它们都可以实现基本的数学公式排版。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="LaTeX简要教程4:包(package)－添加更多功能" />
+    <meta property="twitter:title" content="LaTeX简要教程4:包(package)－添加更多功能" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>LaTeX简要教程4:包(package)－添加更多功能</h1>
+
+  <div class="entry">
+    <p>LaTeX默认提供了很多命令，但是有时并不能满足需要，这时就要引入包里面的功能。下面使用equation、amsmath包做例子，它们都可以实现基本的数学公式排版。</p>
+
+<p>使用<strong>\usepackage</strong>命令导入包，注意这个命令使用的位置：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="k">\usepackage</span><span class="p">{</span>Package Name<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+...
+...
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<h3 id="怎么安装包">怎么安装包</h3>
+
+<p>如果你使用的是Linux，那么大多数包已经默认安装了。可以执行如下命令安装可用的所有LaTeX包（Ubuntu）：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo apt-get install texlive-full</code></pre></figure>
+
+<p>如果你使用的是MiKTeX（Windows），它会下载你引入的包。</p>
+
+<h3 id="使用包">使用包</h3>
+
+<p>LaTeX有很多很多包，提供各种各样的功能。我会介绍一些常用的包。</p>
+
+<p>LaTeX提供了一个叫equation的“环境”，它可以实现数学公式排版。在begin{equation}和\end{equation}之间的代码会使用”数学模式”，例如：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+
+<span class="nt">\begin{equation}</span>
+   f(x) = x<span class="p">^</span>2
+<span class="nt">\end{equation}</span>
+
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>生成的pdf：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-27%20at%2017.28.10.png" alt="Latex" /></p>
+
+<p>上面代码在数学公式后加了一个编号，这个编号是默认自动生成的，它不能移除。但是你可以使用amsmath包把它移除，代码如下：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="k">\usepackage</span><span class="p">{</span>amsmath<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+
+<span class="nt">\begin{equation*}</span>
+  f(x) = x<span class="p">^</span>2
+<span class="nt">\end{equation*}</span>
+
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>现在我们得到了和前面一样的输出，只是数字被移除了：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-27%20at%2019.52.42.png" alt="Latex" /></p>
+
+<hr />
+
+<p>包还可以提供图像、链接和参考文献等等功能。</p>
+
+  </div>
+
+  <div class="date">
+    Written on March 27, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/d-latex-package-intro/',
+		  'title': 'LaTeX简要教程4:包(package)－添加更多功能'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/d-latex-package-intro/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:58 GMT -->
+</html>

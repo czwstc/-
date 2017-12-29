@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/f-latex-add-picture/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:33 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>LaTeX简要教程6:添加图像/图片</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="这篇教程教你怎么使用LaTeX在文档中嵌入图像。需要使用graphicx包。
+
+" />
+    <meta property="og:description" content="这篇教程教你怎么使用LaTeX在文档中嵌入图像。需要使用graphicx包。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="LaTeX简要教程6:添加图像/图片" />
+    <meta property="twitter:title" content="LaTeX简要教程6:添加图像/图片" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>LaTeX简要教程6:添加图像/图片</h1>
+
+  <div class="entry">
+    <p>这篇教程教你怎么使用LaTeX在文档中嵌入图像。需要使用graphicx包。</p>
+
+<p>例子：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="k">\usepackage</span><span class="p">{</span>graphicx<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+
+<span class="nt">\begin{figure}</span>
+  <span class="k">\includegraphics</span><span class="na">[width=\linewidth]</span><span class="p">{</span>dirty.jpg<span class="p">}</span>
+  <span class="k">\caption</span><span class="p">{</span>something beauty.<span class="p">}</span>
+  <span class="k">\label</span><span class="p">{</span>fig:dirty<span class="p">}</span>
+<span class="nt">\end{figure}</span>
+
+Picture <span class="k">\ref</span><span class="p">{</span>fig:dirty<span class="p">}</span> is shot in north
+
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p><em>注意：替换图片文件路径。我把图片放到了.tex文件所在目录。</em></p>
+
+<p>生成的pdf如下图：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-30%20at%2009.28.39.png" alt="Latex" /></p>
+
+<p>figure环境会处理图片在文档中的位置和数字标识。导入图像，使用<strong>\includegraphics</strong>命令，参数为图像文件的路径；还有一个参数是 <code class="highlighter-rouge">width=\linewidth</code> ，指定把图像缩放以适应文档的宽度。</p>
+
+<p>\caption命令设置图像下的标题。\label在文档中不可见的，文档中其他地方可以通过这个引用。</p>
+
+<h3 id="强制图像在特定位置显示">强制图像在特定位置显示</h3>
+
+<p>在以后你会注意到，在代码中添加图像的位置和生成的图像位置不一定对应。如果你的文档包含大量文本，LaTeX也许会把图像放到下一页，或其他有充足空间的地方。可以通过如下代码强制图像在特定位置显示：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="nt">\begin{figure}</span>[h!]
+。。。
+<span class="nt">\end{figure}</span></code></pre></figure>
+
+<p>\begin后的<strong>h!</strong>代表在文档当前位置显示，可能的值如下：</p>
+
+<ul>
+  <li>h(here)：</li>
+  <li>t(top)：页头</li>
+  <li>b(bottom)：页底</li>
+  <li>p(page)：</li>
+  <li>!(override)</li>
+</ul>
+
+<p>总结：</p>
+
+<ul>
+  <li>使用graphicx包和figure环境嵌入图像</li>
+  <li>图像会自动编号</li>
+  <li>添加h!]设置图像位置</li>
+</ul>
+
+  </div>
+
+  <div class="date">
+    Written on March 30, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/f-latex-add-picture/',
+		  'title': 'LaTeX简要教程6:添加图像/图片'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/f-latex-add-picture/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:34 GMT -->
+</html>

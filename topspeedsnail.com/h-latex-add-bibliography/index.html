@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/h-latex-add-bibliography/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:29 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>LaTeX简要教程8:添加表格</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="有时候，需要在文档中插入表格。LaTeX提供了创建表格的环境：table和tabular。
+
+" />
+    <meta property="og:description" content="有时候，需要在文档中插入表格。LaTeX提供了创建表格的环境：table和tabular。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="LaTeX简要教程8:添加表格" />
+    <meta property="twitter:title" content="LaTeX简要教程8:添加表格" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>LaTeX简要教程8:添加表格</h1>
+
+  <div class="entry">
+    <p>有时候，需要在文档中插入表格。LaTeX提供了创建表格的环境：table和tabular。</p>
+
+<p>示例代码：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+
+<span class="nt">\begin{table}</span>[h!]
+  <span class="k">\centering</span>
+  <span class="k">\caption</span><span class="p">{</span>Some Table<span class="p">}</span>
+  <span class="k">\label</span><span class="p">{</span>tab:table1<span class="p">}</span>
+  <span class="nt">\begin{tabular}</span><span class="p">{</span>l|c|r<span class="p">}</span>
+    1 <span class="p">&amp;</span> 2 <span class="p">&amp;</span> 3<span class="k">\\</span>
+    <span class="k">\hline</span>
+    a <span class="p">&amp;</span> b <span class="p">&amp;</span> c<span class="k">\\</span>
+  <span class="nt">\end{tabular}</span>
+<span class="nt">\end{table}</span>
+
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>生成的pdf文档：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2016.43.55.png" alt="Latex" /></p>
+
+<h3 id="代码解释">代码解释：</h3>
+
+<p>&amp;符做为列的分割符；\\做为行的分割符；\begin{tabular}{l|c|r}中的’|‘代表竖线，l，c，r分别代表表格中的文本左对齐、居中对齐、右对齐；\hline代表横线；\caption和 \label是标题和标签。</p>
+
+<p>示例代码（带列标题）：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="k">\usepackage</span><span class="p">{</span>booktabs<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+
+<span class="nt">\begin{table}</span>[h!]
+  <span class="k">\centering</span>
+  <span class="k">\caption</span><span class="p">{</span>Some Table.<span class="p">}</span>
+  <span class="k">\label</span><span class="p">{</span>tab:table1<span class="p">}</span>
+  <span class="nt">\begin{tabular}</span><span class="p">{</span>ccc<span class="p">}</span>
+    <span class="k">\toprule</span>
+    col1 <span class="p">&amp;</span> col2 <span class="p">&amp;</span> col3<span class="k">\\</span>
+    <span class="k">\midrule</span>
+    ddd <span class="p">&amp;</span> eee <span class="p">&amp;</span> fff<span class="k">\\</span>
+    ggg <span class="p">&amp;</span> hhh <span class="p">&amp;</span> iii<span class="k">\\</span>
+    jjj <span class="p">&amp;</span> hhh <span class="p">&amp;</span> mmm<span class="k">\\</span>
+    <span class="k">\bottomrule</span>
+  <span class="nt">\end{tabular}</span>
+<span class="nt">\end{table}</span>
+
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>生成的pdf文档：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2017.22.16.png" alt="Latex" /></p>
+
+<p>像上面那样手动创建表格有个缺点。如果表格较小，完全可以手写；但是当表格较大时，手动书写费时费力。你可以使用一个叫pgfplotstable的包，它可以从csv生成表格。</p>
+
+  </div>
+
+  <div class="date">
+    Written on March 30, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/h-latex-add-bibliography/',
+		  'title': 'LaTeX简要教程8:添加表格'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/h-latex-add-bibliography/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:31 GMT -->
+</html>

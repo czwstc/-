@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kali-linux-install-adobe-flash/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:54:17 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Kali Linux安装Flash插件</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Kali Linux并没有自带Adobe Flash播放器插件；
+
+" />
+    <meta property="og:description" content="Kali Linux并没有自带Adobe Flash播放器插件；
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Kali Linux安装Flash插件" />
+    <meta property="twitter:title" content="Kali Linux安装Flash插件" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Kali Linux安装Flash插件</h1>
+
+  <div class="entry">
+    <p>Kali Linux并没有自带Adobe Flash播放器插件；</p>
+
+<p>在Kali Linux上有两种方法安装Flash；第一种方法比较简单，但是有时不能安装成功；</p>
+
+<h3 id="方法1">方法1</h3>
+
+<p>使用默认仓库安装：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># apt-get install flashplugin-nonfree</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># update-flashplugin-nonfree --install</span></code></pre></figure>
+
+<p>重启。</p>
+
+<h3 id="方法2">方法2</h3>
+
+<p>去adobe官网下载：https://get.adobe.com/flashplayer/</p>
+
+<p>下载tar包：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-23%2014-16-19.png" alt="Kali Linux安装Flash插件" /></p>
+
+<p>解压下载的tar包：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># tar -xf install_flash_player_11_linux.x86_64.tar.gz</span></code></pre></figure>
+
+<p>把解压出来的libflashplayer.so文件移动到火狐的插件目录：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># mv libflashplayer.so /usr/lib/mozilla/plugins/</span></code></pre></figure>
+
+  </div>
+
+  <div class="date">
+    Written on April 23, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kali-linux-install-adobe-flash/',
+		  'title': 'Kali Linux安装Flash插件'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kali-linux-install-adobe-flash/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:54:26 GMT -->
+</html>

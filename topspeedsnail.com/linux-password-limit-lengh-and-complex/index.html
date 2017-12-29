@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/linux-password-limit-lengh-and-complex/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:31:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>怎么设置Linux密码策略</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="这篇文章介绍怎么限制密码使用的长度、复杂度，过期时间。目的是防止用户使用弱密码，强制用户设置强密码。
+
+" />
+    <meta property="og:description" content="这篇文章介绍怎么限制密码使用的长度、复杂度，过期时间。目的是防止用户使用弱密码，强制用户设置强密码。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="怎么设置Linux密码策略" />
+    <meta property="twitter:title" content="怎么设置Linux密码策略" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>怎么设置Linux密码策略</h1>
+
+  <div class="entry">
+    <p>这篇文章介绍怎么限制密码使用的长度、复杂度，过期时间。目的是防止用户使用弱密码，强制用户设置强密码。</p>
+
+<p>Linux的用户密码是一大安全因素。如果你使用弱密码，极有可能会被人暴力破解。很多系统的安全问题都是由于使用弱密码引起的。</p>
+
+<p>做为系统管理员，你应使用复杂的强密码。</p>
+
+<p><a href="../kydra-crack-ssh-and-avoid-attack/index.html">使用Hydra通过ssh破解密码</a></p>
+
+<h1 id="设置密码长度">设置密码长度</h1>
+
+<p>默认安装下，所有基于Linux操作系统，要求用户密码至少使用6个字符。我建议密码至少不少于8位。一个强密码还需要混合大小写字母、数字和特殊字符。</p>
+
+<h2 id="基于debian的系统debian-ubuntu-linux-mint">基于Debian的系统（Debian Ubuntu Linux Mint）</h2>
+
+<p>基于Debian的系统一般把密码验证相关的配置文件放在/etc/pam.d/。</p>
+
+<p>设置最少密码长度限制：至少8个字符。编辑 <strong><em>/etc/pam.d/common-password</em></strong> 文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo vim /etc/pam.d/common-password</code></pre></figure>
+
+<p>找到如下一行：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        [success=1 default=ignore]      pam_unix.so obscure sha512
+</code></pre>
+</div>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2010.16.00.png" alt="common password" /></p>
+
+<p>在上一行后添加 <strong>minlen=8</strong>，这里我设置密码长度至少8个字符。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        [success=1 default=ignore]      pam_unix.so obscure sha512 minlen=8
+</code></pre>
+</div>
+
+<p>保存退出。OK，现在用户不能设置少于8个字符的密码。</p>
+
+<p>测试：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2010.22.21.png" alt="test password" /></p>
+
+<p>如果提供的密码不足8位，密码将设置失败。提示信息：<em>You must choose a longer password</em>（你可以试试自定义提示信息）。</p>
+
+<h2 id="基于rhel的系统rhel-centos-scientific">基于RHEL的系统（RHEL CentOS Scientific）</h2>
+
+<h3 id="rhel7centos7scientific7">RHEL7,CentOS7,Scientific7</h3>
+
+<p>执行如下命令设置密码长度，我设置8位：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># authconfig --passminlen=8 --update</span></code></pre></figure>
+
+<p>查看最少密码位数：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># grep "^minlen" /etc/security/pwquality.conf</span></code></pre></figure>
+
+<p>输入如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>minlen = 8
+</code></pre>
+</div>
+
+<h3 id="rhel6centos6scientific6">RHEL6,CentOS6,Scientific6</h3>
+
+<p>编辑 <strong>/etc/pam.d/system-auth</strong> 文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># vim /etc/pam.d/system-auth</span></code></pre></figure>
+
+<p>修改一行如下，添加minlen=8：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password requisite pam_cracklib.so try_first_pass retry=3 type= minlen=8
+</code></pre>
+</div>
+
+<h1 id="设置密码复杂度">设置密码复杂度</h1>
+
+<p>强制用户密码使用更多的字符集－大写字母、小写字母、数字和特殊字符。</p>
+
+<h2 id="基于debian的系统debian-ubuntu-linux-mint-1">基于Debian的系统（Debian Ubuntu Linux Mint）</h2>
+
+<p>首先安装密码复杂度检查工具库 <strong>libpam-pwquality</strong>：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo apt-get install libpam-pwquality</code></pre></figure>
+
+<p>编辑 <strong>/etc/pam.d/common-password</strong> 文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo vim /etc/pam.d/common-password</code></pre></figure>
+
+<p>安装完上面的库，这个配置文件自动添加了一行：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        requisite                       pam_pwquality.so retry=3
+</code></pre>
+</div>
+
+<p>我们需要使用pam_pwquality来设置密码复杂度。</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2010.49.38.png" alt="pam_pwquality" /></p>
+
+<p>如果你要求密码至少需要有一个大写字母，在上面一行后添加 <strong>ucredit=-1</strong>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        requisite                       pam_pwquality.so retry=3 ucredit=-1
+</code></pre>
+</div>
+
+<p>要求密码至少需要有一个小写字母：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        requisite                       pam_pwquality.so retry=3 lcredit=-1
+</code></pre>
+</div>
+
+<p>要求密码至少需要有一个数字：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        requisite                       pam_pwquality.so retry=3 dcredit=-1
+</code></pre>
+</div>
+
+<p>要求密码至少需要一个除字母数字以外的其他字符：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        requisite                       pam_pwquality.so retry=3 ocredit=-1
+</code></pre>
+</div>
+
+<p>你也可以设置密码最少包含的字符集（minclass）：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        requisite                       pam_pwquality.so retry=3 minclass=2
+</code></pre>
+</div>
+
+<p>你可以自由组合：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        requisite                       pam_pwquality.so retry=3 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1
+</code></pre>
+</div>
+
+<h2 id="基于rhel的系统rhel-centos-scientific-1">基于RHEL的系统（RHEL CentOS Scientific）</h2>
+
+<h3 id="rhel7centos7scientific7-1">RHEL7,CentOS7,Scientific7</h3>
+
+<p>设置密码中至少包含一个小写字符，执行命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># authconfig --enablereqlower --update</span></code></pre></figure>
+
+<p>查看设置：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># grep "^lcredit" /etc/security/pwquality.conf</span></code></pre></figure>
+
+<p>设置密码中至少包含一个大写字符，执行命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># authconfig --enablerequpper --update</span></code></pre></figure>
+
+<p>查看设置：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># grep "^ucredit" /etc/security/pwquality.conf</span></code></pre></figure>
+
+<p>设置密码中至少包含一个数字字符，执行命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># authconfig --enablereqdigit --update</span></code></pre></figure>
+
+<p>查看设置：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># grep "^dcredit" /etc/security/pwquality.conf</span></code></pre></figure>
+
+<p>设置密码中至少包含一个特殊字符，执行命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># authconfig --enablereqother --update</span></code></pre></figure>
+
+<p>查看设置：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># grep "^ocredit" /etc/security/pwquality.conf</span></code></pre></figure>
+
+<h3 id="rhel6centos6scientific6-1">RHEL6,CentOS6,Scientific6</h3>
+
+<p>编辑 <strong>/etc/pam.d/system-auth</strong> 文件：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># vim /etc/pam.d/system-auth</span></code></pre></figure>
+
+<p>找到如下一行，修改：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password requisite pam_cracklib.so try_first_pass retry=3 type= minlen=8 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1
+</code></pre>
+</div>
+
+<p>上面配置了密码至少8个字符长，并且分别包含大小写字母、数字和特殊字符。</p>
+
+<h1 id="设置密码过期时间">设置密码过期时间</h1>
+
+<p>我们设置如下策略：</p>
+
+<ul>
+  <li>一个密码使用的最长天数</li>
+  <li>更改密码最少天数间隔，为了不让用户频繁更改密码</li>
+  <li>在密码过期前多少天提醒用户</li>
+</ul>
+
+<h2 id="基于debian的系统debian-ubuntu-linux-mint-2">基于Debian的系统（Debian Ubuntu Linux Mint）</h2>
+
+<p>编辑文件 <strong>login.defs</strong>：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo vim /etc/login.defs</code></pre></figure>
+
+<p>分别设置如下参数：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PASS_MAX_DAYS 100
+PASS_MIN_DAYS 0
+PASS_WARN_AGE 7
+</code></pre>
+</div>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2011.24.32.png" alt="password过期" /></p>
+
+<p>上面的例子，强制用户每100天更改一次密码，提前7天提醒用户。</p>
+
+<p>注意，上面的配置只对系统中的新建用户生效。如果你要指定某个以存在的用户可以使用如下命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo chage -M &lt;days&gt; &lt;username&gt;
+<span class="gp">$ </span>sudo chage -m &lt;days&gt; &lt;username&gt;
+<span class="gp">$ </span>sudo chage -W &lt;days&gt; &lt;username&gt;</code></pre></figure>
+
+<p>使用 <strong>chage -l username</strong> 命令显示用户密码信息，例：</p>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2011.34.11.png" alt="password" /></p>
+
+<p>你会发现Password inactive和Account expires并没有生效，执行如下命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo chage -E 24/09/2016 -m 0 -M 90 -I 10 -W 7 bibi</code></pre></figure>
+
+<p><img src="../images/2016/3/Screen%20Shot%202016-03-25%20at%2011.40.38.png" alt="password" /></p>
+
+<p>用户在密码过期10天后锁定。</p>
+
+<h2 id="基于rhel的系统rhel-centos-scientific-2">基于RHEL的系统（RHEL CentOS Scientific）</h2>
+
+<p>和Debian系统一样。</p>
+
+<h1 id="防止用户再次使用以前使用过的密码">防止用户再次使用以前使用过的密码</h1>
+
+<p>一般来说，不建议用户再次使用同一个密码。</p>
+
+<h2 id="基于debian的系统debian-ubuntu-linux-mint-3">基于Debian的系统（Debian Ubuntu Linux Mint）</h2>
+
+<p>编辑 <strong>/etc/pam.d/common-password</strong>：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo vim /etc/pam.d/common-password</code></pre></figure>
+
+<p>在下面一行后添加 <strong>remember=10</strong>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password        [success=1 default=ignore]      pam_unix.so obscure use_authtok try_first_pass sha512 remember=10
+</code></pre>
+</div>
+
+<p>上面设置了不允许再次使用最近的10个密码。</p>
+
+<h2 id="基于rhel的系统rhel-centos-scientific-3">基于RHEL的系统（RHEL CentOS Scientific）</h2>
+
+<p>编辑 <strong>/etc/pam.d/system-auth</strong>：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># vim /etc/pam.d/system-auth</span></code></pre></figure>
+
+<p>在下面一行后添加 <strong>remember=10</strong>：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>password     sufficient     pam_unix.so sha512 shadow nullok try_first_pass use_authtok remember=10
+</code></pre>
+</div>
+
+<p>The End~</p>
+
+  </div>
+
+  <div class="date">
+    Written on March 25, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/linux-password-limit-lengh-and-complex/',
+		  'title': '怎么设置Linux密码策略'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/linux-password-limit-lengh-and-complex/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:31:40 GMT -->
+</html>

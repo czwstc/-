@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/latex-circuitikz-circuit/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:12 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>LaTeX:使用circuitikz绘制电路图</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Tikz包提供了很多绘制图形的功能，但是它并不能很好的绘制电路图。我们可以使用circuitikz包解决这个问题，使用它可以轻松绘制电路图。
+
+" />
+    <meta property="og:description" content="Tikz包提供了很多绘制图形的功能，但是它并不能很好的绘制电路图。我们可以使用circuitikz包解决这个问题，使用它可以轻松绘制电路图。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="LaTeX:使用circuitikz绘制电路图" />
+    <meta property="twitter:title" content="LaTeX:使用circuitikz绘制电路图" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>LaTeX:使用circuitikz绘制电路图</h1>
+
+  <div class="entry">
+    <p>Tikz包提供了很多绘制图形的功能，但是它并不能很好的绘制电路图。我们可以使用circuitikz包解决这个问题，使用它可以轻松绘制电路图。</p>
+
+<p>示例代码：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="k">\usepackage</span><span class="p">{</span>tikz<span class="p">}</span>
+<span class="k">\usepackage</span><span class="p">{</span>circuitikz<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+
+<span class="nt">\begin{figure}</span>[h!]
+  <span class="nt">\begin{center}</span>
+    <span class="nt">\begin{circuitikz}</span>
+      <span class="k">\draw</span> (0,0)
+      to[V,v=<span class="p">$</span><span class="nb">U</span><span class="p">_</span><span class="nb">q</span><span class="p">$</span>] (0,2) <span class="c">% 电压源</span>
+      to[short] (2,2)
+      to[R=<span class="p">$</span><span class="nb">R</span><span class="p">_</span><span class="m">1</span><span class="p">$</span>] (2,0) <span class="c">% 电阻</span>
+      to[short] (0,0);
+    <span class="nt">\end{circuitikz}</span>
+    <span class="k">\caption</span><span class="p">{</span>first circuit.<span class="p">}</span>
+  <span class="nt">\end{center}</span>
+<span class="nt">\end{figure}</span>
+
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>生成的pdf文档</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2017.51.15.png" alt="Latex" /></p>
+
+<p>代码解释：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\draw</span> (0,0)
+      to[V,v=<span class="p">$</span><span class="nb">U</span><span class="p">_</span><span class="nb">q</span><span class="p">$</span>] (0,2)</code></pre></figure>
+
+<p>坐标(0,0)做为起始点，(0,2)做为终点，绘制电压源。_V_代表电压源，_v=$U_q$_绘制标识。同理，绘制电阻器：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">      to[short] (2,2)
+      to[R=<span class="p">$</span><span class="nb">R</span><span class="p">_</span><span class="m">1</span><span class="p">$</span>] (2,0)</code></pre></figure>
+
+<p>更多电路图元素可以看<a href="http://texdoc.net/texmf-dist/doc/latex/circuitikz/circuitikzmanual.pdf">circuitikz文档</a>。</p>
+
+<h3 id="添加一个电感器">添加一个电感器：</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="k">\usepackage</span><span class="p">{</span>tikz<span class="p">}</span>
+<span class="k">\usepackage</span><span class="p">{</span>circuitikz<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+
+<span class="nt">\begin{figure}</span>[h!]
+  <span class="nt">\begin{center}</span>
+    <span class="nt">\begin{circuitikz}</span>
+      <span class="k">\draw</span> (0,0)
+      to[V,v=<span class="p">$</span><span class="nb">U</span><span class="p">_</span><span class="nb">q</span><span class="p">$</span>] (0,2)   <span class="c">% 电压源</span>
+      to[short] (2,2)
+      to[R=<span class="p">$</span><span class="nb">R</span><span class="p">_</span><span class="m">1</span><span class="p">$</span>] (2,0)    <span class="c">% 电阻</span>
+      to[short] (0,0);
+      <span class="k">\draw</span> (2,2)
+      to[short] (4,2)
+      to[L=<span class="p">$</span><span class="nb">L</span><span class="p">_</span><span class="m">1</span><span class="p">$</span>] (4,0)   <span class="c">% 电感</span>
+      to[short] (2,0);
+     <span class="nt">\end{circuitikz}</span>
+    <span class="k">\caption</span><span class="p">{</span>first circuit.<span class="p">}</span>
+  <span class="nt">\end{center}</span>
+<span class="nt">\end{figure}</span>
+
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>生成的pdf文档：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2018.06.09.png" alt="Latex" /></p>
+
+<h3 id="添加一个电容器">添加一个电容器：</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="k">\documentclass</span><span class="p">{</span>article<span class="p">}</span>
+
+<span class="k">\usepackage</span><span class="p">{</span>tikz<span class="p">}</span>
+<span class="k">\usepackage</span><span class="p">{</span>circuitikz<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+
+<span class="nt">\begin{figure}</span>[h!]
+  <span class="nt">\begin{center}</span>
+    <span class="nt">\begin{circuitikz}</span>
+      <span class="k">\draw</span> (0,0)
+      to[V,v=<span class="p">$</span><span class="nb">U</span><span class="p">_</span><span class="nb">q</span><span class="p">$</span>] (0,2) <span class="c">% 电压源</span>
+      to[short] (2,2)
+      to[R=<span class="p">$</span><span class="nb">R</span><span class="p">_</span><span class="m">1</span><span class="p">$</span>] (2,0) <span class="c">% 电阻</span>
+      to[short] (0,0);
+      <span class="k">\draw</span> (2,2)
+      to[short] (4,2)
+      to[L=<span class="p">$</span><span class="nb">L</span><span class="p">_</span><span class="m">1</span><span class="p">$</span>] (4,0)  <span class="c">% 电感</span>
+      to[short] (2,0);
+      <span class="k">\draw</span> (4,2)
+      to[short] (6,2)
+      to[C=<span class="p">$</span><span class="nb">C</span><span class="p">_</span><span class="m">1</span><span class="p">$</span>] (6,0)  <span class="c">% 电容</span>
+      to[short] (4,0);
+    <span class="nt">\end{circuitikz}</span>
+    <span class="k">\caption</span><span class="p">{</span>first circuit.<span class="p">}</span>
+  <span class="nt">\end{center}</span>
+<span class="nt">\end{figure}</span>
+
+<span class="nt">\end{document}</span></code></pre></figure>
+
+<p>生成的pdf文档：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2018.10.58.png" alt="Latex" /></p>
+
+<hr />
+
+<h1 id="电路元素画法示例">电路元素画法示例</h1>
+
+<h3 id="线">线</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="nt">\begin{figure}</span>[h!]
+<span class="nt">\begin{circuitikz}</span>
+  <span class="k">\draw</span> (-1,0) to[short,o-o] (1,0);
+<span class="nt">\end{circuitikz}</span>
+<span class="nt">\end{figure}</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2018.15.42.png" alt="Latex" /></p>
+
+<p>改变连接点：</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="nt">\begin{figure}</span>[h!]
+<span class="nt">\begin{circuitikz}</span>
+  <span class="k">\draw</span> (-1,0) to[short,*-] (1,0);
+<span class="nt">\end{circuitikz}</span>
+<span class="nt">\end{figure}</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2018.17.54.png" alt="Latex" /></p>
+
+<h3 id="地线">地线</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="nt">\begin{figure}</span>[h!]
+<span class="nt">\begin{circuitikz}</span>
+  <span class="k">\draw</span> (-1,0) to[short,o-o] (1,0);
+  <span class="k">\draw</span> (0,0) to[short] node[ground] <span class="p">{}</span> (0,-1);
+<span class="nt">\end{circuitikz}</span>
+<span class="nt">\end{figure}</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2018.20.27.png" alt="Latex" /></p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="nt">\begin{figure}</span>[h!]
+<span class="nt">\begin{circuitikz}</span>
+  <span class="k">\draw</span> (-1,0) to[short,o-o] (1,0);
+  <span class="k">\draw</span> (0,0) to[short] node[ground] <span class="p">{</span>GND<span class="p">}</span> (0,-1);
+<span class="nt">\end{circuitikz}</span>
+<span class="nt">\end{figure}</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2018.21.15.png" alt="Latex" /></p>
+
+<h3 id="指示电流方向">指示电流方向</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="nt">\begin{figure}</span>[h!]
+<span class="nt">\begin{circuitikz}</span>
+  <span class="k">\draw</span> (0,0) to[R,i=<span class="p">$</span><span class="nb">i</span><span class="p">_</span><span class="m">1</span><span class="p">$</span>] (2,0);
+<span class="nt">\end{circuitikz}</span>
+<span class="nt">\end{figure}</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2018.22.59.png" alt="Latex" /></p>
+
+<h3 id="晶体管">晶体管</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="nt">\begin{figure}</span>[h!]
+<span class="nt">\begin{circuitikz}</span>
+  <span class="k">\draw</span> (0,0) node[npn](npn1) <span class="p">{}</span>
+  (npn1.base) node[anchor=east] <span class="p">{</span>B<span class="p">}</span>
+  (npn1.collector) node[anchor=south] <span class="p">{</span>C<span class="p">}</span>
+  (npn1.emitter) node[anchor=north] <span class="p">{</span>E<span class="p">}</span>;
+<span class="nt">\end{circuitikz}</span>
+<span class="nt">\end{figure}</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-02%20at%2018.26.42.png" alt="Latex" /></p>
+
+  </div>
+
+  <div class="date">
+    Written on April  1, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/latex-circuitikz-circuit/',
+		  'title': 'LaTeX:使用circuitikz绘制电路图'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/latex-circuitikz-circuit/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:29:29 GMT -->
+</html>

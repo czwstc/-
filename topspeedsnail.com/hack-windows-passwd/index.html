@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/hack-windows-passwd/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:24:52 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用Kali Linux重置Windows密码-chntpw</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="首先制作一个Kali Linux启动U盘：
+
+" />
+    <meta property="og:description" content="首先制作一个Kali Linux启动U盘：
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用Kali Linux重置Windows密码-chntpw" />
+    <meta property="twitter:title" content="使用Kali Linux重置Windows密码-chntpw" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用Kali Linux重置Windows密码-chntpw</h1>
+
+  <div class="entry">
+    <p>首先制作一个Kali Linux启动U盘：</p>
+
+<p><a href="http://blog.topspeedsnail.com/archives/4042">使用dd命令制作USB启动盘</a></p>
+
+<p>在要破解密码的电脑上插入U盘，启动Kali Linux，进入Live模式。</p>
+
+<p>我安装了Windows 8.1和Kali Linux双系统，我就在Kali Linux上破解Windows密码。</p>
+
+<p>打开终端命令行，导航到Windows保存密码的目录：Windows/System32/config，几乎所有的Windows版本都把密码保存在sam文件中。在Kali linux上挂载的路径为：/media/hda1/Windows/System32/config：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-14%2016-05-17.png" alt="sam" /></p>
+
+<p>用户的密码就保存在这里文件里。</p>
+
+<p>Kali Linux上有一个叫chntpw的工具：</p>
+
+<blockquote>
+  <p>change password of a user in a Windows SAM file, or invoke registry editor. Should handle both 32 and 64 bit windows and all version from NT3.x to Win8.1</p>
+</blockquote>
+
+<p>使用如下命令查看Windows系统中所有的用户：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># chntpw -l sam</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-14%2016-15-35.png" alt="sam" /></p>
+
+<p>上面命令列出了系统中的用户，假设要修改用户tian的密码：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># chntpw -u "tian" sam</span></code></pre></figure>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-14%2016-19-58.png" alt="sam" /></p>
+
+<p>我们有好几个选项，你可以清空密码，提升用户权限等等。这个工具的旧版本有更改密码一项，貌似是因为在有些系统上不起作用，所有去掉了这个功能。</p>
+
+  </div>
+
+  <div class="date">
+    Written on April 14, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/hack-windows-passwd/',
+		  'title': '使用Kali Linux重置Windows密码-chntpw'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/hack-windows-passwd/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:25:44 GMT -->
+</html>

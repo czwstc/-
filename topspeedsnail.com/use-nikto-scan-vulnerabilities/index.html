@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/use-nikto-scan-vulnerabilities/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:49:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用Nikto扫描网站漏洞</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Nikto是一个扫描Web服务漏洞的一个工具，也是使用最广泛的扫描工具之一。
+
+" />
+    <meta property="og:description" content="Nikto是一个扫描Web服务漏洞的一个工具，也是使用最广泛的扫描工具之一。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用Nikto扫描网站漏洞" />
+    <meta property="twitter:title" content="使用Nikto扫描网站漏洞" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用Nikto扫描网站漏洞</h1>
+
+  <div class="entry">
+    <p>Nikto是一个扫描Web服务漏洞的一个工具，也是使用最广泛的扫描工具之一。</p>
+
+<p><a href="https://cirt.net/Nikto2">Nikto</a>在它网站上的描述：</p>
+
+<blockquote>
+  <p>Nikto is an Open Source (GPL) web server scanner which performs comprehensive tests against web servers for multiple items, including over 6700 potentially dangerous files/programs, checks for outdated versions of over 1250 servers, and version specific problems on over 270 servers. It also checks for server configuration items such as the presence of multiple index files, HTTP server options, and will attempt to identify installed web servers and software. Scan items and plugins are frequently updated and can be automatically updated.</p>
+</blockquote>
+
+<p><strong>扫描的内容包括：</strong></p>
+
+<ul>
+  <li>服务器错误配置</li>
+  <li>默认文件和程序</li>
+  <li>不安全的文件和程序</li>
+  <li>过期程序</li>
+</ul>
+
+<p><strong>使用示例：</strong></p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># nikto -h http://your_target.com -o result.html</span></code></pre></figure>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-17%20at%2015.51.32.png" alt="使用Nikto扫描网站漏洞" /></p>
+
+<p>-h参数指定要扫描的主机；-o指定把扫描结果保存到result.html文件中，输出格式也可以是CSV、TXT和XML。</p>
+
+<p>它将会用不少时间扫描，扫描完成之后查看result.html文件：</p>
+
+<p><img src="../images/2016/5/Screenshot%20from%202016-05-17%2015-54-07.png" alt="使用Nikto扫描网站漏洞" /></p>
+
+<hr />
+
+<p><strong>更多常用选项：</strong></p>
+
+<ul>
+  <li>-config：使用自定义的配置文件扫描</li>
+  <li>-update：升级插件数据库</li>
+  <li>-Format：输出结果文件类型，它可以是CSV、HTML、NBE、SQL、TXT、XML。CSV和XML通常可以做为其他工具的输入</li>
+  <li>-evasion：指定使用一些加密技术，避免被防火墙或其他防卫系统检测到</li>
+  <li>-list-plugins：列出可用的插件</li>
+  <li>-Plugins：指定使用的插件，默认使用所有插件</li>
+  <li>-port：如果Web服务器没有使用标准的端口（80 443），你可能需要用到这个选项</li>
+</ul>
+
+<p><strong>更多信息查看man：</strong></p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># man nikto</span></code></pre></figure>
+
+  </div>
+
+  <div class="date">
+    Written on May 15, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/use-nikto-scan-vulnerabilities/',
+		  'title': '使用Nikto扫描网站漏洞'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/use-nikto-scan-vulnerabilities/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:49:44 GMT -->
+</html>

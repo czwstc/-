@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/macbook-crack-wifi-with-wpa-wpa2/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:27:28 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用macbook破解WPA/WPA2 wifi密码</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="文本仅供学习交流。
+
+" />
+    <meta property="og:description" content="文本仅供学习交流。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用macbook破解WPA/WPA2 wifi密码" />
+    <meta property="twitter:title" content="使用macbook破解WPA/WPA2 wifi密码" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用macbook破解WPA/WPA2 wifi密码</h1>
+
+  <div class="entry">
+    <p>文本仅供学习交流。</p>
+
+<p>我使用的系统是macbook air：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-05%20at%2011.26.50.png" alt="macbook" /></p>
+
+<h2 id="安装aircrack-ng">安装aircrack-ng</h2>
+
+<p>使用<a href="https://www.macports.org/install.php">macport</a>安装，命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo port install aircrack-ng</code></pre></figure>
+
+<h2 id="抓包抓取带密码的握手包">抓包－抓取带密码的握手包</h2>
+
+<p>macbook自带了一个wifi工具：airport。</p>
+
+<p>首先，断开wifi：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-05%20at%2014.10.48.png" alt="macbook" /></p>
+
+<p>查看周围的wifi：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s</code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-05%20at%2014.12.27.png" alt="macbook" /></p>
+
+<p>查看本机的无线网卡设备：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>ifconfig</code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-05%20at%2014.16.15.png" alt="macbook" /></p>
+
+<p><strong>抓包：</strong></p>
+
+<p>airport可以使用网卡的监听模式抓取周围的无线网络数据包。其中，对我们最重要的数据包是：包含密码的包－也叫握手包。当有新用户或断开用户自动连接wifi时，会发送握手包。有一种攻击方式是reinjecting packet，它可以强制无线路由器重启，这样当用户自动连接时可以获得握手包。如果无线路由器用户多的话，可以静等（<a href="../kali-linux-crack-wifi-wpa/index.html">Kali Linux使用Aircrack破解wifi密码(wpa/wpa2)</a>）。</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport en0 sniff 6</code></pre></figure>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-05%20at%2014.35.17.png" alt="macbook" /></p>
+
+<p>en0是无线网卡设备；6是要破解wifi的CHANNEL。</p>
+
+<p>静等用户连接wifi，获得握手包。</p>
+
+<p>抓的包，保存在/tmp：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-05%20at%2014.27.21.png" alt="macbook" /></p>
+
+<h2 id="破解wifi密码">破解wifi密码</h2>
+
+<p>获得握手包之后，我们还需要破解加密的密码。</p>
+
+<p>好的密码字典一个，应包含常见的弱密码、手机号、姓名生日组合、各大网站泄露的密码、英语单词等等。如果使用字典破解不了，说明密码还算复杂；暴力穷举更是费时费力。（论复杂密码的重要性）。</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>sudo aircrack-ng -w password.txt -b c8:3a:35:30:3e:c8 /tmp/<span class="k">*</span>.cap</code></pre></figure>
+
+<p>-w：指定字典文件；－b：指定要破解的wifi BSSID。</p>
+
+<p>破解过程：</p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-05%20at%2014.45.30.png" alt="macbook" /></p>
+
+<p><img src="../images/2016/4/Screen%20Shot%202016-04-05%20at%2015.15.39.png" alt="macbook" /></p>
+
+<blockquote>
+  <h3 id="我使用的密码字典">我使用的密码字典：</h3>
+
+  <p>http://pan.baidu.com/s/1clxaCA (全，未压缩15G)</p>
+
+  <p>http://pan.baidu.com/s/1o7MCcHk (简，未压缩680M)</p>
+</blockquote>
+
+  </div>
+
+  <div class="date">
+    Written on April  5, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/macbook-crack-wifi-with-wpa-wpa2/',
+		  'title': '使用macbook破解WPA/WPA2 wifi密码'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/macbook-crack-wifi-with-wpa-wpa2/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:28:26 GMT -->
+</html>

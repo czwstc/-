@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from topspeedsnail.com/Linux-most-dangerous-cmd/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:33:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Linux上最危险的8个命令</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Linux命令是很强大、高效的。但是有时侯执行一些命令要非常小心，尤其是，当你不知道自己在干什么的情况下。
+
+" />
+    <meta property="og:description" content="Linux命令是很强大、高效的。但是有时侯执行一些命令要非常小心，尤其是，当你不知道自己在干什么的情况下。
+
+" />
+    
+    <meta name="author" content="Elephant And Balloon" />
+
+    
+    <meta property="og:title" content="Linux上最危险的8个命令" />
+    <meta property="twitter:title" content="Linux上最危险的8个命令" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Elephant And Balloon - 关于黑技术的小博客" href="../feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="../index.html" class="site-avatar"><img src="https://avatars1.githubusercontent.com/u/5637917?v=3&amp;s=140" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="../index.html">Elephant And Balloon</a></h1>
+            <p class="site-description">关于黑技术的小博客</p>
+          </div>
+
+          <nav>
+            <a href="../index.html">主页</a>
+            <a href="../about/index.html">关于我</a>
+          </nav>
+
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Linux上最危险的8个命令</h1>
+
+  <div class="entry">
+    <p>Linux命令是很强大、高效的。但是有时侯执行一些命令要非常小心，尤其是，当你不知道自己在干什么的情况下。</p>
+
+<p>这篇文件总结了8个可能让人悲剧的10个命令。这些命令在执行之前，一定要再三确认，一不小心就会让你追悔莫及。</p>
+
+<h3 id="1-rm--rf">#1) rm -rf</h3>
+
+<p><code class="highlighter-rouge">rm -rf</code>是删除目录最快的方法，如果使用桌面环境（右键-&gt;删除）删除一个零碎目录需要很长时间。但是一个小小的打字错误，有可能对你的系统造成不可恢复的破坏。例如下面这条命令：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># rm -rf /</span></code></pre></figure>
+
+<p>上面这条命令需要系统管理员权限，这也是不建议使用root用户登录系统的原因之一。</p>
+
+<p>rm常用选项：</p>
+
+<ul>
+  <li><strong>rm</strong>：删除文件</li>
+  <li><strong>rm -r</strong>：递归的删除目录，包括空目录</li>
+  <li><strong>rm -f</strong>：直接删除文件，不询问</li>
+  <li><strong>rm -rf /</strong>：直接根(root)目录，不询问</li>
+  <li><strong>rm -rf *</strong>：删除当前目录的所有东西，不询问</li>
+  <li><strong>rm -rf</strong>：删除当前目录和子目录，不询问</li>
+</ul>
+
+<p>在执行<code class="highlighter-rouge">rm -rf</code>一定要小心。为了防止<code class="highlighter-rouge">rm</code>命令意外删除文件或目录，可以为<code class="highlighter-rouge">rm</code>创建一个别名<code class="highlighter-rouge">rm -i</code>，每次都需要确认删除。</p>
+
+<h3 id="2-">#2) :(){:|:&amp;};:</h3>
+
+<p>上面这个命令就是所谓的fork炸弹。执行上面代码会耗尽系统资源而崩溃。更多关于fork炸弹的信息看这里：<a href="http://blog.topspeedsnail.com/archives/2757">Linux：怎么防止fork炸弹攻击</a>。</p>
+
+<h3 id="3-cmd--devsda">#3) cmd &gt; /dev/sda</h3>
+
+<p>cmd代表一个命令，<code class="highlighter-rouge">cmd &gt; /dev/sda</code>把cmd命令的输出写到了<code class="highlighter-rouge">/dev/sda</code>块设备上，会导致<code class="highlighter-rouge">/dev/sda</code>块设备数据的全部丢失。</p>
+
+<h3 id="4-mv-目录-devnull">#4) mv 目录 /dev/null</h3>
+
+<p>上面命令会把目录移动到<code class="highlighter-rouge">/dev/null</code>。在Linux中， /dev/null是一个特殊的设备文件，有人把它叫做黑洞。</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># mv /home/* /dev/null</span></code></pre></figure>
+
+<p>上面命令相当于：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># rm -rf /home/*</span></code></pre></figure>
+
+<h3 id="5-wget-http怀有恶意脚本的url--o---sh">#5) wget http://怀有恶意脚本的url -O- | sh</h3>
+
+<p>上面这条命令在安装软件或系统环境时总用到，它从url下载脚本，下载完成之后自动执行脚本。不要对不信任的url执行上面这个命令。</p>
+
+<h3 id="6-mkfsext3-devsda">#6) mkfs.ext3 /dev/sda</h3>
+
+<p>上面命令是格式化命令，执行完之后硬盘数据全部清空。</p>
+
+<h3 id="7--file">#7) &gt; file</h3>
+
+<p><code class="highlighter-rouge">&gt; file</code>命令会把文件中的数据全部清空。</p>
+
+<h3 id="8-dd-ifdevrandom-ofdevsda">#8) dd if=/dev/random of=/dev/sda</h3>
+
+<p>上面命令向sda设备中写入随机数据，这是不可恢复的。</p>
+
+<p>如果一个命令你不知道是干嘛的，不要盲目执行，可以先使用man查询一下。如果你有因为执行错误命令而导致系统崩溃的经历，欢迎留言。</p>
+
+  </div>
+
+  <div class="date">
+    Written on March 22, 2016
+  </div>
+
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'elephantandballoon';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/tiancode"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-75657205-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/Linux-most-dangerous-cmd/',
+		  'title': 'Linux上最危险的8个命令'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+
+<!-- Mirrored from topspeedsnail.com/Linux-most-dangerous-cmd/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Nov 2017 04:33:13 GMT -->
+</html>
